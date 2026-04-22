@@ -1,0 +1,170 @@
+{
+  "name": "products-agent",
+  "description": "CBA Products Agent. Provides personalised banking product recommendations including credit cards, savings accounts, transaction accounts, insurance, and bundled offers based on customer profile and needs.",
+  "url": "http://localhost:8001/",
+  "version": "1.0.0",
+  "protocolVersion": "0.3.0",
+  "preferredTransport": "JSONRPC",
+  "provider": {
+    "organization": "Commonwealth Bank of Australia",
+    "url": "https://www.commbank.com.au",
+    "team": "Financial Companion"
+  },
+  "capabilities": {
+    "streaming": false,
+    "pushNotifications": false,
+    "stateTransitionHistory": false
+  },
+  "skills": [
+    {
+      "id": "product-recommendations",
+      "name": "Product recommendations",
+      "description": "Recommends CBA banking products (credit cards, savings accounts, transaction accounts, insurance, home loan packages) based on customer needs, profile, and financial goals.",
+      "tags": [
+        "products",
+        "recommendations",
+        "credit-cards",
+        "savings",
+        "accounts",
+        "insurance"
+      ],
+      "examples": [
+        "What credit card is best for me?",
+        "Show me savings account options",
+        "I need a new transaction account",
+        "What insurance products do you offer?",
+        "Compare your home loan packages"
+      ]
+    },
+    {
+      "id": "product-details",
+      "name": "Product details lookup",
+      "description": "Retrieves detailed information about specific CBA products including features, fees, rates, eligibility criteria, and terms.",
+      "tags": [
+        "products",
+        "details",
+        "rates",
+        "fees",
+        "features"
+      ],
+      "examples": [
+        "What are the fees on the Smart Access account?",
+        "Tell me about the NetBank Saver interest rate",
+        "What's the annual fee on the Awards credit card?"
+      ]
+    },
+    {
+      "id": "product-comparison",
+      "name": "Multi-product comparison",
+      "description": "Compares multiple banking products within a single interaction across credit cards, savings accounts, personal loans, term deposits, and travel cards.",
+      "tags": [
+        "comparison",
+        "credit-cards",
+        "savings",
+        "personal-loans",
+        "term-deposits"
+      ],
+      "examples": [
+        "Compare the Awards card with the Ultimate card",
+        "What's the difference between NetBank Saver and GoalSaver?",
+        "Compare personal loan rates for different amounts"
+      ]
+    },
+    {
+      "id": "existing-loan-accounts",
+      "name": "Existing home loan and personal loan account details",
+      "description": "Retrieves customer-specific details for existing personal loans and home loan accounts including balances, rates, repayment amounts, schedules, redraw details, and account-specific fees.",
+      "tags": [
+        "existing-accounts",
+        "home-loan",
+        "personal-loan",
+        "account-details"
+      ],
+      "examples": [
+        "What is my current home loan balance?",
+        "Show me my home loan repayment amount",
+        "What's the interest rate on my existing mortgage?",
+        "What's my personal loan balance and repayment schedule?"
+      ]
+    }
+  ],
+  "defaultInputModes": [
+    "text/plain"
+  ],
+  "defaultOutputModes": [
+    "text/plain",
+    "application/json"
+  ],
+  "authentication": {
+    "schemes": [
+      "public"
+    ]
+  },
+  "routing": {
+    "shortDescription": "This agent handles CommBank banking product discovery and product-specific account details. It covers non-home-loan product information such as features, fees, rates, eligibility, comparisons, and recommendations, and it also handles customer-specific details for existing personal loans and existing home loan accounts.",
+    "detailedGuidance": "A sub-agent that can answer questions about CommBank products, as well as customer personal/consumer and home loan account repayment details.\n\n    This agent has access to data pertaining to:\n    - General information about CommBank products (features, fees, rates, eligibility, conditions, etc.) - EXCLUDING ALL home loan products\n    - Detailed customer-specific information for:\n        \u2022 Customer's existing home loan / mortgage accounts (balances, rates, repayments, etc.)\n        \u2022 Personal loans / Consumer loans\n        (includes personalised pricing, balances, interest rates, repayment amounts, repayment schedule, loan term, redraw details, and any customer-specific fees).\n\n    ----------------------------------------------------------------------\n    CORE CAPABILITIES\n    ----------------------------------------------------------------------\n        - Explain any CommBank product EXCEPT home loan products (credit cards, savings accounts, personal loans, term deposits, travel cards etc.)\n        - Compare multiple products within a single call (In this case, the full comparison must be handled in one call)\n        - Retrieve and explain customer-specific details for personal/consumer loans, and existing home loan accounts\n\n    Note: If the user asks about multiple personal loans, all loan details must be handled within a single call to handle_products_request.\n\n    ----------------------------------------------------------------------\n    WHEN TO ROUTE HERE - EVEN IF QUERY NEEDS CLARIFICATION\n    ----------------------------------------------------------------------\n    Route to this sub-agent when the user asks about:\n    - Any CommBank product EXCEPT home loan products - including information about features, fees, interest rates, eligibility, and terms or conditions (e.g., credit cards, savings accounts, personal loans, term deposits, travel cards)\n    - Comparing 2 or more non-home-loan products\n    - Their OWN/MY personal/consumer, or existing home loan account details\n    - UNCLEAR queries mentioning \"card\", \"loan\" (non-home), \"account\" (product features), \"rate\", \"fee\", \"application\"\n    - VAGUE product inquiries that can be reasonably inferred as banking product related\n\n    PRODUCTS AGENT HANDLES OWN CLARIFICATIONS:\n    This agent can handle unclear, incomplete, or confusing queries within the banking products domain. Route here even if the query needs clarification, as long as there are ANY indicators of banking product intent (excluding home loans).\n\n    DO NOT route here for:\n    - ANY question about borrowing for a property or house\n    - Generic home loan product queries (features, eligibility, applications)\n    - Home loan calculations, borrowing power, or property valuations\n    - Route home loan PRODUCT and BORROWING questions to homebuying agent instead\n\n    DO route here for:\n    - Customer's existing home loan account details (balances, rates, repayments, account-specific information)\n\n    DO NOT route here for money management questions:\n    - Account balances and transaction queries (route to Savings agent)\n    - Spending analysis and budgeting (route to Savings agent)\n    - Affordability questions based on spending patterns (route to Savings agent) - e.g., \"Can I afford a new fridge?\" or \"Can I afford a car?\"\n    - Bill and subscription management (route to Savings agent)\n    - Debt payoff strategies based on spending analysis (route to Savings agent)\n    - Savings goals tracking and progress (route to Savings agent)\n    - \"What-if\" financial simulations (route to Savings agent)\n\n    ----------------------------------------------------------------------\n    MULTI-INTENT HANDLING\n    ----------------------------------------------------------------------\n    If the user has multiple intents, the `request` argument must only contain the product-related part. This tool should process only that part.",
+    "domainAliases": [
+      "products",
+      "banking-products",
+      "credit-cards",
+      "personal-loans",
+      "savings-account-products",
+      "term-deposits",
+      "existing-home-loan-details"
+    ],
+    "queryExamples": {
+      "shouldRoute": [
+        "What credit card would suit me for travel rewards?",
+        "Compare your savings accounts for everyday banking",
+        "What fees apply to the Smart Access account?",
+        "What personal loan options do you have?",
+        "What is my current home loan repayment amount?",
+        "Show me the interest rate on my existing mortgage account",
+        "What term deposit rates are available right now?"
+      ],
+      "shouldNotRoute": [
+        "How much can I borrow for a house? -> homebuying-agent (borrowing power, not product/account details)",
+        "Show my grocery spending this month -> savings-agent (transaction analysis, not product information)",
+        "Help me save for a holiday -> savings-agent (savings strategy, not product discovery)",
+        "What grants are available for first home buyers? -> homebuying-agent (homebuying support, not product details)"
+      ]
+    },
+    "boundaries": {
+      "handles": [
+        "CommBank product features, fees, rates, eligibility, and comparisons for non-home-loan products",
+        "Recommendations across credit cards, transaction accounts, savings accounts, personal loans, and term deposits",
+        "Customer-specific details for existing personal loans and existing home loan accounts"
+      ],
+      "doesNotHandle": [
+        "Borrowing power, property affordability, and new home loan product guidance -> homebuying-agent",
+        "Transactions, budgets, bills, and spending analysis -> savings-agent",
+        "Savings goals and affordability based on spending behaviour -> savings-agent"
+      ]
+    },
+    "triggerKeywords": [
+      "credit card",
+      "account fees",
+      "interest rate",
+      "product",
+      "compare accounts",
+      "personal loan",
+      "term deposit",
+      "repayment amount",
+      "existing home loan"
+    ],
+    "handoffNotes": "Route existing home loan account detail questions here, but route new home loan research, borrowing power, property affordability, or application questions to homebuying-agent. If the user is asking about spending, savings, bills, or budgets rather than product features or loan account details, route to savings-agent.",
+    "priority": "normal",
+    "requiresAuthentication": false
+  },
+  "cba": {
+    "domain": "everyday-banking",
+    "environment": "local",
+    "classification": "internal",
+    "dataClassification": "internal",
+    "healthCheckUrl": "http://localhost:8001/health"
+  },
+  "domain": "products",
+  "deployment": "internal",
+  "port": 8001,
+  "poolAttribute": "products_agent"
+}

@@ -1,0 +1,204 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://cba.com.au/schemas/a2a/agent-card-local.schema.json",
+	"title": "Financial Companion A2A Agent Card",
+	"description": "Local agent card schema used by Financial Companion. It preserves routing metadata required for the future card-based classifier while remaining compatible with current A2A transport fields.",
+	"type": "object",
+	"required": [
+		"name",
+		"description",
+		"url",
+		"version",
+		"protocolVersion",
+		"preferredTransport",
+		"provider",
+		"capabilities",
+		"skills",
+		"defaultInputModes",
+		"defaultOutputModes",
+		"authentication",
+		"routing"
+	],
+	"properties": {
+		"name": {
+			"type": "string",
+			"pattern": "^[a-z][a-z0-9-]+[a-z0-9]$"
+		},
+		"description": {
+			"type": "string",
+			"minLength": 20,
+			"maxLength": 500
+		},
+		"url": {
+			"type": "string",
+			"format": "uri"
+		},
+		"version": {
+			"type": "string",
+			"pattern": "^\\d+\\.\\d+\\.\\d+$"
+		},
+		"protocolVersion": {
+			"type": "string",
+			"enum": ["0.2.0", "0.3.0"]
+		},
+		"preferredTransport": {
+			"type": "string",
+			"enum": ["JSONRPC", "HTTP", "gRPC", "HTTP+JSON"]
+		},
+		"provider": {
+			"type": "object",
+			"required": ["organization", "url"],
+			"properties": {
+				"organization": { "type": "string" },
+				"url": { "type": "string", "format": "uri" },
+				"team": { "type": "string" },
+				"contactEmail": { "type": "string", "format": "email" },
+				"slackChannel": { "type": "string" }
+			},
+			"additionalProperties": false
+		},
+		"capabilities": {
+			"type": "object",
+			"properties": {
+				"streaming": { "type": "boolean" },
+				"pushNotifications": { "type": "boolean" },
+				"stateTransitionHistory": { "type": "boolean" }
+			},
+			"additionalProperties": false
+		},
+		"skills": {
+			"type": "array",
+			"minItems": 1,
+			"items": {
+				"type": "object",
+				"required": ["id", "name", "description", "tags"],
+				"properties": {
+					"id": { "type": "string" },
+					"name": { "type": "string" },
+					"description": { "type": "string", "minLength": 10 },
+					"tags": {
+						"type": "array",
+						"items": { "type": "string" }
+					},
+					"examples": {
+						"type": "array",
+						"items": { "type": "string" }
+					}
+				},
+				"additionalProperties": false
+			}
+		},
+		"defaultInputModes": {
+			"type": "array",
+			"items": { "type": "string" }
+		},
+		"defaultOutputModes": {
+			"type": "array",
+			"items": { "type": "string" }
+		},
+		"authentication": {
+			"type": "object",
+			"required": ["schemes"],
+			"properties": {
+				"schemes": {
+					"type": "array",
+					"items": {
+						"type": "string",
+						"enum": ["public", "Bearer", "OAuth2", "ApiKey", "bearer", "oauth2", "apikey"]
+					}
+				},
+				"credentials": { "type": "string" }
+			},
+			"additionalProperties": false
+		},
+		"routing": {
+			"type": "object",
+			"required": ["shortDescription", "domainAliases", "queryExamples", "boundaries"],
+			"properties": {
+				"shortDescription": { "type": "string", "minLength": 50, "maxLength": 3000 },
+				"detailedGuidance": { "type": "string" },
+				"domainAliases": {
+					"type": "array",
+					"minItems": 1,
+					"items": { "type": "string" }
+				},
+				"queryExamples": {
+					"type": "object",
+					"required": ["shouldRoute", "shouldNotRoute"],
+					"properties": {
+						"shouldRoute": {
+							"type": "array",
+							"minItems": 5,
+							"items": { "type": "string" }
+						},
+						"shouldNotRoute": {
+							"type": "array",
+							"minItems": 3,
+							"items": { "type": "string" }
+						}
+					},
+					"additionalProperties": false
+				},
+				"boundaries": {
+					"type": "object",
+					"required": ["handles", "doesNotHandle"],
+					"properties": {
+						"handles": {
+							"type": "array",
+							"minItems": 2,
+							"items": { "type": "string" }
+						},
+						"doesNotHandle": {
+							"type": "array",
+							"minItems": 2,
+							"items": { "type": "string" }
+						}
+					},
+					"additionalProperties": false
+				},
+				"triggerKeywords": {
+					"type": "array",
+					"items": { "type": "string" }
+				},
+				"handoffNotes": { "type": "string" },
+				"priority": {
+					"type": "string",
+					"enum": ["high", "normal", "low"]
+				},
+				"requiresAuthentication": { "type": "boolean" },
+				"parallelExecutionGroup": { "type": "string" }
+			},
+			"additionalProperties": false
+		},
+		"cba": {
+			"type": "object",
+			"required": ["domain", "environment", "classification"],
+			"properties": {
+				"domain": { "type": "string" },
+				"environment": { "type": "string", "enum": ["local", "dev", "sit", "uat", "prod"] },
+				"classification": { "type": "string", "enum": ["internal", "cross-team", "external"] },
+				"dataClassification": {
+					"type": "string",
+					"enum": ["public", "internal", "confidential", "restricted"]
+				},
+				"healthCheckUrl": { "type": "string", "format": "uri" },
+				"runbookUrl": { "type": "string", "format": "uri" },
+				"sla": {
+					"type": "object",
+					"properties": {
+						"p50LatencyMs": { "type": "integer" },
+						"p99LatencyMs": { "type": "integer" },
+						"availabilityTarget": { "type": "string" }
+					},
+					"additionalProperties": false
+				}
+			},
+			"additionalProperties": false
+		},
+		"documentationUrl": {
+			"type": "string",
+			"format": "uri"
+		}
+	},
+	"additionalProperties": true
+}

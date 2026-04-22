@@ -1,0 +1,41 @@
+# A2A Agents Configuration
+#
+# All A2A-eligible agents that Financial Companion orchestrates.
+# Use the canonical DOMAIN NAME as the agent name (e.g., "products", not "products-agent").
+# A2A card names are derived automatically: "products" -> "products-agent".
+#
+# Internal agents: hosted by FC, cards loaded from common/a2a/agent_cards/
+# External agents: hosted elsewhere, cards fetched from {url}/.well-known/agent.json
+#
+# Set enabled: false to disable an agent without removing its config.
+
+agents:
+  # --- Internal agents (hosted by Financial Companion) ---
+  - name: products
+    type: internal
+    enabled: true
+    description: "Banking products and recommendations"
+
+  - name: savings
+    type: internal
+    enabled: true
+    description: "Savings goals and financial wellness"
+
+  - name: homebuying
+    type: internal
+    enabled: true
+    description: "Home loan applications and advice"
+
+  # --- External agents (hosted elsewhere) ---
+  - name: weather
+    type: external
+    url: https://weather-agent:9000/
+    enabled: false # Disabled by default since it's a POC and not yet fully integrated
+    description: "External weather agent (POC)"
+
+  # Example: dispute agent
+  - name: dispute
+    type: external
+    url: https://dispute-agent:9002/
+    enabled: false
+    description: "Dispute resolution agent (not yet in prod)"

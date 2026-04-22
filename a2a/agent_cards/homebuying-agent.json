@@ -1,0 +1,289 @@
+{
+  "name": "homebuying-agent",
+  "description": "CBA Home Loans Agent. Provides home loan guidance including borrowing power calculations, affordability assessments, home loan product comparisons, and support for home loan applications.",
+  "url": "http://localhost:8003/",
+  "version": "1.0.0",
+  "protocolVersion": "0.3.0",
+  "preferredTransport": "JSONRPC",
+  "provider": {
+    "organization": "Commonwealth Bank of Australia",
+    "url": "https://www.commbank.com.au",
+    "team": "Financial Companion"
+  },
+  "capabilities": {
+    "streaming": false,
+    "pushNotifications": false,
+    "stateTransitionHistory": false
+  },
+  "skills": [
+    {
+      "id": "borrowing-power",
+      "name": "Borrowing power and serviceability",
+      "description": "Calculate borrowing capacity based on income, expenses, dependants, and existing debts. Assess impact of credit cards, personal loans, and HECS/HELP debt on borrowing power.",
+      "tags": [
+        "borrowing-power",
+        "serviceability",
+        "calculator",
+        "capacity"
+      ],
+      "examples": [
+        "How much can I borrow?",
+        "What's my borrowing capacity with a k income?",
+        "Calculate my borrowing power for a joint application"
+      ]
+    },
+    {
+      "id": "loan-repayments",
+      "name": "Loan repayment calculations",
+      "description": "Calculate monthly, weekly, or fortnightly repayments for any loan amount and term. Compare Principal and Interest vs Interest-Only repayments.",
+      "tags": [
+        "repayments",
+        "calculator",
+        "P&I",
+        "interest-only"
+      ],
+      "examples": [
+        "What are my repayments on a $750,000 loan?",
+        "Calculate repayments for a 30-year loan",
+        "Compare P&I vs interest-only repayments"
+      ]
+    },
+    {
+      "id": "property-affordability",
+      "name": "Property affordability assessment",
+      "description": "Assess affordability for specific properties by address or price. Recommend property price ranges based on financial situation.",
+      "tags": [
+        "affordability",
+        "property",
+        "assessment"
+      ],
+      "examples": [
+        "Can I afford a ,000 property?",
+        "What property price can I afford?",
+        "Is this house within my budget?"
+      ]
+    },
+    {
+      "id": "property-valuations",
+      "name": "Property valuations and insights",
+      "description": "Provide property valuations for specific addresses, compare values between properties, and match location data.",
+      "tags": [
+        "valuation",
+        "property-value",
+        "address"
+      ],
+      "examples": [
+        "What is the value of 123 Main Street?",
+        "Compare values for two properties",
+        "Property valuation for my address"
+      ]
+    },
+    {
+      "id": "upfront-costs",
+      "name": "Upfront costs and deposit planning",
+      "description": "Calculate stamp duty, conveyancing fees, LMI costs, and total upfront costs. Create deposit savings strategies and timelines.",
+      "tags": [
+        "stamp-duty",
+        "LMI",
+        "deposit",
+        "upfront-costs"
+      ],
+      "examples": [
+        "How much stamp duty in NSW for k property?",
+        "What are my total upfront costs?",
+        "Calculate LMI for a 10% deposit"
+      ]
+    },
+    {
+      "id": "government-grants",
+      "name": "Government grants and schemes",
+      "description": "Provide information on First Home Guarantee, state-specific grants, First Home Super Saver Scheme, and professional schemes. Assess eligibility.",
+      "tags": [
+        "grants",
+        "first-home-buyer",
+        "schemes",
+        "eligibility"
+      ],
+      "examples": [
+        "What grants are available for first home buyers?",
+        "Do I qualify for the First Home Guarantee?",
+        "What is the First Home Super Saver Scheme?"
+      ]
+    },
+    {
+      "id": "home-loan-products",
+      "name": "Home loan product information",
+      "description": "Explain features of all CBA home loan products including Simple, Extra, Digi, SVR, and Fixed Rate loans. Provide current rates and comparisons.",
+      "tags": [
+        "products",
+        "rates",
+        "fixed",
+        "variable",
+        "comparison"
+      ],
+      "examples": [
+        "Compare fixed and variable home loans",
+        "What is the rate on the Extra Home Loan?",
+        "Tell me about the Simple Home Loan features"
+      ]
+    },
+    {
+      "id": "application-process",
+      "name": "Application process and lender support",
+      "description": "Guide users through home loan application, explain pre-approval, connect with lenders, and provide application status.",
+      "tags": [
+        "application",
+        "pre-approval",
+        "lender",
+        "process"
+      ],
+      "examples": [
+        "How do I apply for a home loan?",
+        "What is pre-approval?",
+        "Book an appointment with a home loan specialist"
+      ]
+    },
+    {
+      "id": "refinancing",
+      "name": "Refinancing guidance",
+      "description": "Explain refinancing process to CBA, calculate potential savings, compare current vs refinanced loan scenarios.",
+      "tags": [
+        "refinancing",
+        "refinance",
+        "savings"
+      ],
+      "examples": [
+        "I want to refinance my mortgage to CBA",
+        "Calculate savings from refinancing",
+        "How does refinancing work?"
+      ]
+    },
+    {
+      "id": "equity-planning",
+      "name": "Equity and property purchase planning",
+      "description": "Calculate available equity in existing properties, explain using equity for new purchases, model equity scenarios.",
+      "tags": [
+        "equity",
+        "investment",
+        "additional-property"
+      ],
+      "examples": [
+        "How much equity do I have in my property?",
+        "Can I use equity for a second property?",
+        "Calculate my available equity"
+      ]
+    },
+    {
+      "id": "complex-scenarios",
+      "name": "Complex scenarios and strategic advice",
+      "description": "Handle guarantor arrangements, debt vs deposit decisions, impact of closing credit cards, employment-specific questions (casual, non-citizens).",
+      "tags": [
+        "guarantor",
+        "complex",
+        "strategy",
+        "advice"
+      ],
+      "examples": [
+        "How do guarantor arrangements work?",
+        "Should I pay off debt or save for deposit?",
+        "Can I get a loan as a casual worker?"
+      ]
+    },
+    {
+      "id": "homebuying-education",
+      "name": "Homebuying education and terminology",
+      "description": "Explain key concepts like LVR, LMI, pre-approval, stamp duty, and comparison rates. Guide through overall homebuying process.",
+      "tags": [
+        "education",
+        "terminology",
+        "concepts",
+        "guidance"
+      ],
+      "examples": [
+        "What is LVR?",
+        "Explain LMI and how to avoid it",
+        "What does comparison rate mean?"
+      ]
+    }
+  ],
+  "defaultInputModes": [
+    "text/plain"
+  ],
+  "defaultOutputModes": [
+    "text/plain",
+    "application/json"
+  ],
+  "authentication": {
+    "schemes": [
+      "public"
+    ]
+  },
+  "routing": {
+    "shortDescription": "This agent handles the homebuying journey end to end, including borrowing power, repayments, property affordability, valuations, upfront buying costs, government schemes, home loan product guidance, applications, refinancing, and property purchase planning. It should receive homebuying questions even when the query is incomplete, vague, or needs clarification.",
+    "detailedGuidance": "Handle home loan and property purchase related requests across the entire homebuying journey. This agent focuses on home loan PRODUCTS and NEW applications, NOT existing home loan account management.\n\nCore Functions:\n\n1. BORROWING POWER AND SERVICEABILITY\n   - Calculate borrowing capacity based on income, expenses, dependants, and existing debts\n   - Assess impact of credit cards, personal loans, HECS/HELP debt, and other liabilities\n   - Compare borrowing power for single vs joint applications\n   - Model borrowing capacity across different loan types and LVR scenarios\n   - Answer \"how much can I borrow?\" questions in ANY variation\n\n2. LOAN REPAYMENT CALCULATIONS\n   - Calculate monthly/weekly/fortnightly repayments for given loan amounts\n   - Estimate repayments across different loan terms (15/20/25/30 years)\n   - Compare Principal and Interest (P&I) vs Interest-Only (IO) repayments\n   - Model impact of extra repayments on interest savings\n   - Scenario modelling (e.g., \"what if rates rise by 1%?\")\n   - Calculate repayments for specific CBA home loan products\n\n3. PROPERTY AFFORDABILITY ASSESSMENT\n   - Assess affordability for specific properties (by address or price)\n   - Recommend property price ranges based on financial situation\n   - Calculate disposable income after mortgage repayments\n   - Compare affordability between multiple properties\n   - Answer \"can I afford this property?\" questions\n\n4. PROPERTY VALUATIONS AND INSIGHTS\n   - Provide property valuations for specific addresses\n   - Compare values between multiple properties\n   - Match location data for given addresses\n   - Property details and comparisons\n\n5. UPFRONT COSTS AND DEPOSIT PLANNING\n   - Calculate stamp duty (including state-specific exemptions)\n   - Estimate conveyancing and legal fees\n   - Calculate Lenders Mortgage Insurance (LMI) costs\n   - Provide total upfront cost breakdowns\n   - Determine deposit requirements (including minimum deposits)\n   - Create deposit savings strategies and timelines\n   - Explain what LMI is and how to avoid it\n\n6. GOVERNMENT GRANTS AND SCHEMES\n   - Provide information on First Home Guarantee (5% deposit scheme)\n   - Explain state-specific grants and eligibility criteria\n   - Detail First Home Super Saver Scheme\n   - Information on professional schemes (e.g., medical professionals)\n   - Assess eligibility and benefits for first home buyers\n   - Clarify that investment properties typically don't qualify for grants\n\n7. HOME LOAN PRODUCT INFORMATION\n   - Explain features of ALL CBA home loan products:\n     * Simple Home Loan\n     * Extra Home Loan\n     * Digi Home Loan\n     * Standard Variable Rate (SVR) loans (with/without package)\n     * Fixed Rate loans (1/2/3/5 year terms, with/without package)\n   - Provide current interest rates and comparison rates\n   - Compare different loan products and recommend suitable options\n   - Explain offset accounts, redraw facilities, and product features\n   - Clarify loan types: owner-occupied vs investment, P&I vs IO\n   - Answer questions about specific product eligibility and features\n\n8. APPLICATION PROCESS AND LENDER SUPPORT\n   - Guide users through home loan application process\n   - Explain pre-approval and conditional approval processes\n   - Direct users to online application forms\n   - Help book appointments with home loan specialists/lenders\n   - Explain required documentation and paperwork\n   - Provide application status information\n   - Connect users with human lenders when requested\n\n9. REFINANCING\n   - Explain refinancing process to CBA\n   - Calculate potential savings from refinancing\n   - Compare current loan vs refinanced loan scenarios\n   - Guide users through refinancing application\n\n10. EQUITY AND PROPERTY PURCHASE PLANNING\n    - Calculate available equity in existing properties for new purchases\n    - Explain how to use equity for future property purchases\n    - Model scenarios for using equity as deposit for additional properties\n\n11. COMPLEX SCENARIOS AND STRATEGIC ADVICE\n    - Explain guarantor arrangements and requirements\n    - Advise on whether to pay off debts vs save for deposit\n    - Model impact of closing credit cards on borrowing power\n    - Compare scenarios (e.g., buying vs renting, renovation costs)\n    - Address employment-specific questions (casual workers, non-citizens, age)\n    - Explain eligibility criteria for different borrower types\n\n12. HOMEBUYING EDUCATION AND TERMINOLOGY\n    - Explain key concepts: LVR (Loan to Value Ratio), LMI, LDP, pre-approval\n    - Define stamp duty, conveyancing, comparison rates\n    - Guide users through the overall homebuying process\n    - Clarify loan terminology and acronyms\n\nCRITICAL ROUTING RULES:\n\nALWAYS ROUTE TO HOMEBUYING AGENT - EVEN IF QUERY NEEDS CLARIFICATION:\n- ANY question containing: \"borrow\", \"borrowing power\", \"home loan\", \"mortgage\", \"property\", \"house\", \"home\"\n- ANY question about property addresses, valuations, or affordability\n- ANY question about \"can I afford [property/amount]?\"\n- ANY repayment calculation questions\n- ANY question about deposits, stamp duty, LMI, upfront costs\n- ANY question about government grants, schemes, or first home buyer benefits\n- ANY question about home loan products (Simple, Extra, Digi, SVR, Fixed Rate)\n- ANY question about home loan interest rates or comparison rates\n- ANY question about applying for a home loan or speaking to a lender\n- ANY question about refinancing TO CBA\n- ANY question about guarantors in the context of home loans\n- ANY question about using equity for new property purchases\n- ANY question about investment property loans\n- UNCLEAR queries that mention homebuying, home purchasing, or property-related terms\n- VAGUE queries about loans when context suggests property/housing\n\nDO NOT ROUTE TO HOMEBUYING AGENT:\n- Existing home loan account details (balances, rates, repayments, redraw facilities, arrears status) - route to Products agent\n\nHOMEBUYING AGENT HANDLES OWN CLARIFICATIONS:\nThis agent can handle unclear, incomplete, or confusing queries within the homebuying domain. Route here even if the query needs clarification, as long as there are ANY indicators of property, housing, borrowing, or mortgage-related intent.\n\nThis agent handles the home loan journey from initial research through to application and refinancing, covering both prospective home buyers and existing customers exploring new purchases.",
+    "domainAliases": [
+      "homebuying",
+      "home-loans",
+      "mortgage",
+      "property-purchase",
+      "borrowing-power",
+      "refinancing",
+      "first-home-buyer"
+    ],
+    "queryExamples": {
+      "shouldRoute": [
+        "How much can I borrow for a house?",
+        "Can I afford a $750,000 property?",
+        "What would repayments be on a $600,000 loan?",
+        "What grants are available for first home buyers?",
+        "Compare fixed and variable home loans",
+        "How much stamp duty would I pay in NSW?",
+        "I want to refinance my mortgage to CBA"
+      ],
+      "shouldNotRoute": [
+        "What is my current home loan balance? -> products-agent (existing loan account detail, not homebuying guidance)",
+        "Show my grocery spend this month -> savings-agent (money management, not home lending)",
+        "What fees apply to a credit card? -> products-agent (banking product detail, not homebuying)",
+        "How am I tracking on my savings goal? -> savings-agent (savings progress, not home loan support)"
+      ]
+    },
+    "boundaries": {
+      "handles": [
+        "Borrowing power, affordability, and repayment calculations for home loans",
+        "Property valuations, deposit planning, LMI, stamp duty, and government grant guidance",
+        "Home loan product guidance, applications, refinancing, and broader property purchase planning"
+      ],
+      "doesNotHandle": [
+        "Existing home loan account balances, rates, repayments, or redraw details -> products-agent",
+        "Transaction analysis, budgeting, and spending-based affordability -> savings-agent",
+        "General banking product comparisons outside home lending -> products-agent"
+      ]
+    },
+    "triggerKeywords": [
+      "home loan",
+      "mortgage",
+      "borrow",
+      "borrowing power",
+      "property",
+      "house",
+      "stamp duty",
+      "lmi",
+      "deposit",
+      "refinance"
+    ],
+    "handoffNotes": "Homebuying queries should route here even when vague or incomplete if there is any property, mortgage, house, borrowing, or deposit context. The main boundary is existing loan account servicing: those questions stay with products-agent rather than homebuying-agent.",
+    "priority": "normal",
+    "requiresAuthentication": false
+  },
+  "cba": {
+    "domain": "home-lending",
+    "environment": "local",
+    "classification": "internal",
+    "dataClassification": "internal",
+    "healthCheckUrl": "http://localhost:8003/health"
+  },
+  "domain": "homebuying",
+  "deployment": "internal",
+  "port": 8003,
+  "poolAttribute": "homebuying_agent"
+}

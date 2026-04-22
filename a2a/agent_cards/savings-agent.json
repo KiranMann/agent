@@ -1,0 +1,226 @@
+{
+  "name": "savings-agent",
+  "description": "CBA Savings Agent. Provides personalised savings advice, goal tracking, budget management, cash flow insights, and spending analysis based on the customer's financial behaviour and goals.",
+  "url": "http://localhost:8002/",
+  "version": "1.0.0",
+  "protocolVersion": "0.3.0",
+  "preferredTransport": "JSONRPC",
+  "provider": {
+    "organization": "Commonwealth Bank of Australia",
+    "url": "https://www.commbank.com.au",
+    "team": "Financial Companion"
+  },
+  "capabilities": {
+    "streaming": false,
+    "pushNotifications": false,
+    "stateTransitionHistory": false
+  },
+  "skills": [
+    {
+      "id": "transaction-analysis",
+      "name": "Transaction analysis and spending insights",
+      "description": "Query and analyze transactions by amount, date, merchant, or category. Identify spending patterns, trends, and answer \"where has my money gone?\" questions.",
+      "tags": [
+        "transactions",
+        "spending",
+        "analysis",
+        "patterns"
+      ],
+      "examples": [
+        "How much did I spend on groceries last month?",
+        "Show me my spending breakdown",
+        "Where has my money gone this month?"
+      ]
+    },
+    {
+      "id": "affordability-planning",
+      "name": "Affordability and financial planning",
+      "description": "Assess whether customers can afford purchases based on spending patterns. Create savings strategies and run what-if simulations.",
+      "tags": [
+        "affordability",
+        "planning",
+        "savings-strategy"
+      ],
+      "examples": [
+        "Can I afford a new fridge?",
+        "Can I afford a ,000 car?",
+        "How long to save for a holiday?"
+      ]
+    },
+    {
+      "id": "debt-management",
+      "name": "Debt payoff planning",
+      "description": "Help customers create debt payoff strategies based on spending analysis and identify savings opportunities for faster debt repayment.",
+      "tags": [
+        "debt",
+        "payoff",
+        "credit-card"
+      ],
+      "examples": [
+        "How can I pay off my credit card debt?",
+        "Create a debt payoff plan for me",
+        "Help me pay down my credit card faster"
+      ]
+    },
+    {
+      "id": "bills-subscriptions",
+      "name": "Bills and subscriptions management",
+      "description": "Manage all bills and subscriptions including setup, automatic payments, and identifying opportunities to save money.",
+      "tags": [
+        "bills",
+        "subscriptions",
+        "payments",
+        "recurring"
+      ],
+      "examples": [
+        "Show me my bills and subscriptions",
+        "Set up automatic bill payments",
+        "Which subscriptions can I cancel to save money?"
+      ]
+    },
+    {
+      "id": "budget-tracking",
+      "name": "Category budgets and tracking",
+      "description": "Track spending against budget limits for each category, manage budget settings, and show historical spend data.",
+      "tags": [
+        "budget",
+        "categories",
+        "tracking",
+        "limits"
+      ],
+      "examples": [
+        "Am I within my budget this month?",
+        "Update my grocery budget to ",
+        "Show me how I'm tracking against my dining budget"
+      ]
+    },
+    {
+      "id": "savings-goals",
+      "name": "Savings goals tracking and progress",
+      "description": "Track progress toward savings goals with timelines, calculate savings timelines, and create strategies to reach goals.",
+      "tags": [
+        "savings",
+        "goals",
+        "tracking",
+        "progress"
+      ],
+      "examples": [
+        "How am I tracking on my savings goal?",
+        "How long to save for a home deposit?",
+        "Show my savings goal progress"
+      ]
+    },
+    {
+      "id": "scenario-modeling",
+      "name": "Scenario modeling and simulations",
+      "description": "Run financial simulations to answer what-if questions, model spending changes, and forecast savings impact.",
+      "tags": [
+        "simulations",
+        "what-if",
+        "scenarios",
+        "forecasting"
+      ],
+      "examples": [
+        "What if I reduce dining out by 20 percent?",
+        "Model cutting my subscription spending",
+        "Show me the impact of reducing entertainment spending"
+      ]
+    },
+    {
+      "id": "savings-performance",
+      "name": "Savings performance analysis",
+      "description": "Analyze historical savings behavior, compare current savings rate to averages, and identify strong or weak performance periods.",
+      "tags": [
+        "performance",
+        "historical",
+        "trends",
+        "analysis"
+      ],
+      "examples": [
+        "How is my savings performance this month?",
+        "Show my savings trends over the last year",
+        "Am I saving more or less than usual?"
+      ]
+    }
+  ],
+  "defaultInputModes": [
+    "text/plain"
+  ],
+  "defaultOutputModes": [
+    "text/plain",
+    "application/json"
+  ],
+  "authentication": {
+    "schemes": [
+      "public"
+    ]
+  },
+  "routing": {
+    "shortDescription": "This agent handles money management questions grounded in a customer's balances, transactions, budgets, bills, and savings behaviour. It covers spending analysis, affordability based on cash flow, savings strategies, debt payoff planning, budget tracking, subscriptions, and savings goal progress.",
+    "detailedGuidance": "A money management agent that helps customers understand their spending, manage budgets, track savings, and plan for financial goals.\n\nCORE CAPABILITIES:\n\n1. TRANSACTION ANALYSIS AND SPENDING INSIGHTS\n   - Query and filter transactions by amount, date, merchant, category, or description\n   - Analyse spending patterns across categories (groceries, entertainment, transport, etc.)\n   - Identify spending trends, unusual cycles, and anomalies\n   - Provide spending summaries with historical comparisons\n   - Answer \"where has my money gone?\" type questions\n\n2. FINANCIAL OVERVIEW AND POSITION\n   - Provide financial position summaries for planning purposes\n   - Track money flow for budgeting and savings analysis\n\n3. AFFORDABILITY AND FINANCIAL PLANNING\n   - Assess whether customers can afford purchases (e.g., \"Can I afford a new fridge?\", \"Can I afford a car?\")\n   - Analyse spending patterns to determine affordability\n   - Create savings strategies for specific purchase goals\n   - Run \"what-if\" simulations to model spending changes and savings impact\n   - Calculate how long it would take to save for specific goals based on current spending patterns\n\n4. DEBT MANAGEMENT STRATEGIES\n   - Help customers understand how to pay off credit card debt\n   - Analyse spending to identify savings opportunities for debt repayment\n   - Create debt payoff plans based on transaction history and spending behavior\n\n5. BILLS AND SUBSCRIPTIONS MANAGEMENT\n   - Retrieve and display all customer bills and subscriptions (including predicted, manual, home loans, personal loans)\n   - Set up automatic bill payments and recurring payments\n   - Add, edit, and delete manual bills\n   - Confirm predicted bills\n   - Help customers understand and manage their bill timeline\n   - Identify bills that can be modified or cancelled to save money\n\n6. CATEGORY BUDGETS\n   - Show how customers are tracking against budget limits for each spending category\n   - Update and manage category budget limits\n   - Retrieve budget cycle settings (weekly, fortnightly, monthly)\n   - Display current cycle spending summaries\n   - Get historical spend data for specific categories\n   - Show category-specific transactions\n\n7. SAVINGS GOALS TRACKING\n   - Retrieve and display customer's Savings Goals (a specific CommBank product)\n   - Show progress toward savings goals with timelines and completion percentages\n   - Calculate savings timelines for goals (e.g., \"How long to save for a home deposit?\")\n   - Track goal history and performance\n   - Help customers create savings strategies to reach their goals\n\n8. SCENARIO MODELING AND SIMULATIONS\n   - Run financial simulations to answer \"what-if\" questions\n   - Model the impact of spending changes (e.g., \"What if I reduce dining out by 20%?\")\n   - Inject hypothetical transactions to forecast savings\n   - Remove or modify spending categories to see potential savings\n   - Compare multiple scenarios side-by-side\n   - Forecast savings over time based on behavioral changes\n\n9. SAVINGS PERFORMANCE ANALYSIS\n    - Analyse historical savings behavior and performance\n    - Compare current savings rate to historical averages\n    - Show savings trends over time (daily, weekly, monthly)\n    - Calculate average savings per cycle\n    - Identify periods of strong or weak savings performance\n\nWHEN TO ROUTE TO SAVINGS AGENT - EVEN IF QUERY NEEDS CLARIFICATION:\n\nRoute here for ANY questions about:\n- Transaction queries and spending analysis (\"Where did I spend?\", \"Show my transactions\")\n- Spending patterns and insights (\"What do I spend on?\", \"My biggest expenses\")\n- Affordability questions (\"Can I afford X?\", \"How much can I spend on Y?\")\n- Savings strategies and timelines (\"How long to save $X?\", \"Help me save for Z\")\n- Debt payoff planning (\"How can I pay off my credit card debt?\")\n- Bills and subscriptions (\"Show my bills\", \"Set up automatic payments\", \"Cancel my subscription\")\n- Budget tracking (\"Am I over budget?\", \"Show my budget\", \"Update my grocery budget\")\n- Savings goals (\"Show my goals\", \"How am I tracking?\", \"Savings goal progress\")\n- Financial simulations (\"What if I reduce spending?\", \"Model different scenarios\")\n- Money management questions (\"Help me understand my finances\", \"Where has my money gone?\")\n- UNCLEAR queries mentioning \"money\", \"savings\", \"spend\", \"save\", \"budget\", \"balance\", \"transaction\", \"bill\"\n- VAGUE financial management questions that can be reasonably inferred as money-related\n\nSAVINGS AGENT HANDLES OWN CLARIFICATIONS:\nThis agent can handle unclear, incomplete, or confusing queries within the money management domain. Route here even if the query needs clarification, as long as there are ANY indicators of spending, saving, budgeting, or financial management intent.\n\nDO NOT ROUTE HERE FOR:\n\n- Questions about CommBank PRODUCT features, rates, and eligibility (route to Products agent)\n  * Exception: Questions about using existing savings accounts for money management ARE for Savings agent\n- Questions about applying for new products like credit cards, personal loans, or opening new savings accounts (route to Products agent)\n- Home loan calculations, borrowing power, LVR, or property-related questions (route to Homebuying agent)\n  * Exception: \"How long to save for a home deposit?\" should route to BOTH Savings AND Homebuying agents\n- Questions about specific account transactions for HOME LOANS or PERSONAL LOANS (route to Products agent for personal loans, Homebuying for home loans)\n\nIMPORTANT DISTINCTIONS:\n\n- Savings account MANAGEMENT (balances, transactions, budgeting) \u2192 Savings agent\n- Savings account PRODUCT INFO (rates, features, eligibility) \u2192 Products agent\n- \"Can I afford X?\" based on spending analysis \u2192 Savings agent\n- \"Am I eligible for X product?\" \u2192 Products agent\n- \"How long to save for a home deposit?\" \u2192 BOTH Savings AND Homebuying agents\n- Bill payment SETUP and MANAGEMENT \u2192 Savings agent\n- Insurance product modifications \u2192 Products agent (unless it's about bill payment management)",
+    "domainAliases": [
+      "savings",
+      "money-management",
+      "spending-insights",
+      "budgeting",
+      "cash-flow",
+      "savings-goals",
+      "bill-management"
+    ],
+    "queryExamples": {
+      "shouldRoute": [
+        "How much did I spend on groceries last month?",
+        "Help me save $5,000 for a holiday",
+        "Am I within my budget this month?",
+        "Can I afford a new fridge?",
+        "Show me my subscriptions and bills",
+        "How am I tracking on my savings goal?",
+        "What happens if I cut dining out by 20 percent?"
+      ],
+      "shouldNotRoute": [
+        "What credit card rewards options do you have? -> products-agent (product features, not money management)",
+        "How much can I borrow for a property? -> homebuying-agent (home lending, not spending analysis)",
+        "What is the rate on a term deposit? -> products-agent (product information, not account management)",
+        "What is my current home loan repayment amount? -> products-agent (existing loan account detail, not savings analysis)"
+      ]
+    },
+    "boundaries": {
+      "handles": [
+        "Transaction analysis, spending summaries, and cash flow insights",
+        "Budget tracking, category budgets, bills, subscriptions, and savings goal progress",
+        "Affordability, debt payoff planning, and what-if simulations based on customer spending behaviour"
+      ],
+      "doesNotHandle": [
+        "Product features, eligibility, rates, and new account recommendations -> products-agent",
+        "Borrowing power, property affordability, and home loan applications -> homebuying-agent",
+        "Existing personal loan or home loan account-specific transaction detail -> products-agent"
+      ]
+    },
+    "triggerKeywords": [
+      "spend",
+      "budget",
+      "save",
+      "savings goal",
+      "bill",
+      "subscription",
+      "cash flow",
+      "afford",
+      "transactions",
+      "where did my money go"
+    ],
+    "handoffNotes": "Use this card for money management questions that depend on balances, transactions, budgets, or behavioural analysis. If the user asks about product features or eligibility, route to products-agent. If the request is about home lending, borrowing, or property purchase support, route to homebuying-agent. Queries like 'How long to save for a home deposit?' remain valid savings-agent candidates even when they may also involve homebuying-agent.",
+    "priority": "normal",
+    "requiresAuthentication": false
+  },
+  "cba": {
+    "domain": "everyday-banking",
+    "environment": "local",
+    "classification": "internal",
+    "dataClassification": "internal",
+    "healthCheckUrl": "http://localhost:8002/health"
+  },
+  "domain": "savings",
+  "deployment": "internal",
+  "port": 8002,
+  "poolAttribute": "savings_agent"
+}
