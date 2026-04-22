@@ -1,0 +1,15 @@
+services:
+    financial_companion_pgadmin:
+        depends_on:
+            financial_companion_postgres:
+                condition: service_healthy
+        environment:
+            PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: "False"
+            PGADMIN_CONFIG_SERVER_MODE: "False"
+            PGADMIN_DEFAULT_EMAIL: admin@example.com
+            PGADMIN_DEFAULT_PASSWORD: password
+        image: hub.docker.internal.cba/dpage/pgadmin4:latest
+        networks:
+            - agentic_network
+        ports:
+            - 83:80

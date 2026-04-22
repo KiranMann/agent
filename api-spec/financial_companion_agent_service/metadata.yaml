@@ -1,0 +1,19 @@
+metadata-version: 'v1.0'
+api-type: REST # GRPC, ASYNCAPI, GRAPHQL, SOAP, RPC, CUSTOM are the other types #Mandatory
+business-unit: Retail Technology # refer https://catalogue.api.cba.com.au/docs/metadata-description
+visibility: Protected # https://api.standards.cba/rest_taxonomy/#api-visibility #Mandatory
+category: Experience
+business-application-name: Api.OriginationExperience API  #Mandatory, will be able to filter APIs using this
+service-domain-grouping: Session Dialogue #Mandatory
+service-domain: Session Dialogue - Money Management #Mandatory
+function: Read_Write # Can be Read, Write or Read_Write # Mandatory
+internet-facing: Y # Y and N  # Mandatory
+future-intent: Invest # Tolerate, Invest, Migrate, Eliminate   # Mandatory
+auth-type: Custom JWT  # Mandatory
+depends-on-legacy-integration: Y # 'Y'or 'N' # Mandatory, Legacy Integration platforms are MP/EP/IFW. Any dependencies on these platform should be captured as 'Y'
+data-classification: Customer and Personal # Mandatory
+usage-metrics: Y
+ownership: Internal #  Internal or  External # Mandatory, Ownership of API, if API is developed in-house by internal development team within CBA and it's subsidiaries then ownership is Internal. If API is provided by vendor application running internally or as SaaS then ownership is External
+technical-service-ci: 'CI0xxxxx' #TODO Optional, Provide Technical Service CI ID from Service Now once available
+title: Financial Companion Agent Service
+short-description: API to support the Financial Companion Agent capabilities

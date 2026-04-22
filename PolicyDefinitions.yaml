@@ -1,0 +1,19 @@
+TestCoverage:
+  Python:
+    Overall: 70%
+CodeSecurity:
+  Snyk:
+    Sast:
+      High: 0
+      Medium: 5
+      Low: 10
+    Sca:
+      Critical: 0
+      High: 0
+      Medium: 5
+      Low: 10
+  GithubSecretScan:
+    MaxAllowedSecrets: 0
+CodeQuality:
+  SonarQube:
+    QualityGate: Medium_No_Coverage

@@ -1,0 +1,27 @@
+services:
+    langfuse-server:
+        image: langfuse/langfuse:2
+        depends_on:
+            db:
+                condition: service_healthy
+        networks:
+            - agentic_network
+        ports:
+            - "3000:3000"
+        environment:
+            - DATABASE_URL=postgresql://postgres:postgres@db:5432/postgres
+            - NEXTAUTH_SECRET=mysecret
+            - SALT=mysalt
+            - ENCRYPTION_KEY=0000000000000000000000000000000000000000000000000000000000000000
+            - NEXTAUTH_URL=http://localhost:3000
+            - TELEMETRY_ENABLED=${TELEMETRY_ENABLED:-true}
+            - LANGFUSE_ENABLE_EXPERIMENTAL_FEATURES=${LANGFUSE_ENABLE_EXPERIMENTAL_FEATURES:-false}
+            - LANGFUSE_INIT_ORG_ID=${LANGFUSE_INIT_ORG_ID:-default-org}
+            - LANGFUSE_INIT_ORG_NAME=${LANGFUSE_INIT_ORG_NAME:-Default Organization}
+            - LANGFUSE_INIT_PROJECT_ID=${LANGFUSE_INIT_PROJECT_ID:-default-project}
+            - LANGFUSE_INIT_PROJECT_NAME=${LANGFUSE_INIT_PROJECT_NAME:-Default Project}
+            - LANGFUSE_INIT_PROJECT_PUBLIC_KEY=${LANGFUSE_INIT_PROJECT_PUBLIC_KEY:-pk_default_123}
+            - LANGFUSE_INIT_PROJECT_SECRET_KEY=${LANGFUSE_INIT_PROJECT_SECRET_KEY:-sk_default_123}
+            - LANGFUSE_INIT_USER_EMAIL=${LANGFUSE_INIT_USER_EMAIL:-test@cba.com}
+            - LANGFUSE_INIT_USER_NAME=${LANGFUSE_INIT_USER_NAME:-test}
+            - LANGFUSE_INIT_USER_PASSWORD=${LANGFUSE_INIT_USER_PASSWORD:-testtest}

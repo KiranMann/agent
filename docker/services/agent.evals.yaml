@@ -1,0 +1,29 @@
+services:
+    financial_companion_agent:
+        depends_on:
+            financial_companion_postgres:
+                condition: service_healthy
+            financial_companion_liquibase:
+                condition: service_completed_successfully
+        entrypoint: sh -c "python apps/companion/app/main.py --dev --skip-auth 2>&1 | tee app.log"
+        env_file:
+            - .env.local
+        environment:
+            - GROUP_IDP_PRIVATE_KEY
+            - GROUP_HYBRID_IDP_CERT
+            - GROUP_HYBRID_IDP_PRIVATE_KEY
+        logging:
+            driver: json-file
+            options:
+                max-file: "3"
+                max-size: 10m
+        network_mode: host
+        stdin_open: true
+        tty: true
+        volumes:
+            - ./.env.local:/opt/defaultsite/.env.local
+            - ./private.key:/opt/defaultsite/private.key  # File path consumed by runtime_utils
+            - ./apps/companion:/opt/defaultsite/apps/companion
+            - ./common:/opt/defaultsite/common
+            - ./evals:/opt/defaultsite/evals
+            - ./mock_services:/opt/defaultsite/mock_services

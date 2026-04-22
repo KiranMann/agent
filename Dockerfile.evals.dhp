@@ -1,0 +1,57 @@
+FROM applicationinfrastructure-public.docker.internal.cba/ca-certificates:latest AS certificates
+FROM applicationinfrastructure-public.docker.internal.cba/library/python:3.12-slim@sha256:d9a9a1b7265f2c3ea499b6367434853072b0e4abd376a5a79626a14d655eb079 AS bookworm-repo-settings
+
+FROM hub.docker.internal.cba/python:3.13-slim-bookworm
+
+COPY --from=certificates roots/ /etc/ssl/certs
+COPY --from=certificates internal/ /usr/local/share/ca-certificates/
+COPY --from=bookworm-repo-settings /etc/apt/sources.list.d/debian.sources /etc/apt/sources.list.d/debian.sources
+
+RUN update-ca-certificates
+
+RUN apt-get update && apt-get install -y curl jq vim git nodejs npm
+
+WORKDIR /opt/defaultsite
+
+COPY api_services/ /opt/defaultsite/api_services
+COPY mock_services /opt/defaultsite/mock_services
+COPY common /opt/defaultsite/common
+COPY apps/companion/ /opt/defaultsite/apps/companion/
+
+COPY pyproject.toml uv.lock /opt/defaultsite/
+COPY dhp-gen-self-signed-cert.sh /opt/defaultsite
+
+RUN pip install uv==0.10.11 \
+    --no-cache-dir \
+    --index-url https://artifactory.internal.cba/artifactory/api/pypi/org.python.pypi/simple && \
+    uv sync --frozen --group dev --no-cache
+
+# Configure PATH to use uv virtual environment
+ENV VIRTUAL_ENV=/opt/defaultsite/.venv \
+    PATH="/opt/defaultsite/.venv/bin:$PATH"
+
+RUN ./dhp-gen-self-signed-cert.sh
+
+ENV SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
+ENV REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
+ENV SSL_ALB_CERT_PATH=/etc/ssl/certs/dhp-self-signed-cert-for-instance.crt
+ENV SSL_ALB_KEY_PATH=/etc/ssl/private/dhp-self-signed-cert-for-instance.key
+
+## Financial Companion Setup ##
+
+ENV PYTHONPATH=/opt/defaultsite \
+    APP_NAME=companion
+
+COPY evals /opt/defaultsite/evals
+COPY .env.eval /opt/defaultsite/.env.local
+
+ENV PORT=8081
+ENV HOST=0.0.0.0
+ENV AGENT=FinancialCompanionAgent
+ENV AGENT_LLM=openai/gpt-4.1_v2025-04-14_EASTUS2
+
+EXPOSE 8081
+
+ARG ENTRY_POINT
+ENV ENTRY_POINT=${ENTRY_POINT}
+ENTRYPOINT ["sh", "-c", "${ENTRY_POINT}"]

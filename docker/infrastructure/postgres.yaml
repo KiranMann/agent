@@ -1,0 +1,21 @@
+services:
+    financial_companion_postgres:
+        environment:
+            PGPORT: 5433
+            POSTGRES_DB: agenticai_agent_db
+            POSTGRES_PASSWORD: password
+            POSTGRES_USER: postgres
+        healthcheck:
+            interval: 3s
+            retries: 10
+            test:
+                - CMD-SHELL
+                - pg_isready -U postgres -d agenticai_agent_db -h 127.0.0.1
+            timeout: 3s
+        image: hub.docker.internal.cba/postgres:16-alpine
+        networks:
+            - agentic_network
+        ports:
+            - 5433:5433
+        volumes:
+            - ~/financial_companion_postgres_data:/var/lib/postgresql/data

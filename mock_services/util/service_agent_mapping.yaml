@@ -1,0 +1,55 @@
+# Service to Agent Mapping Configuration
+# This file defines which agents handle which services and methods,
+# and maps agents to their environment variables for cache paths.
+
+# Main service-to-agent mapping
+# Each agent contains services, and each service contains a list of methods
+service_agent_mapping:
+  savings_agent:
+    CashflowService:
+      - get_account_settings
+      - get_all_account_transactions
+      - get_savings_summary
+    EnrichedTransactionsService:
+      - transactions_query_all
+    AccountsEdgeService:
+      - get_accounts
+    SpendLimitsService:
+      - get_cycle_settings
+      - update_cycle_settings
+      - get_all_categories
+      - get_category_transactions
+    ShoppingDealsServices:
+      - get_offers
+    BillHubService:
+      - get_predicted_bills
+      - get_bill_instances
+    SavingsGoalsService:
+      - get_goals
+      - get_goal
+
+  products_agent:
+    AccountServices:
+      - get_accounts
+      - get_default_account
+    ProductsService:
+      - get_products
+      - get_product_detail
+
+  home_buying_agent:
+    HomeBuyingService:
+      - calculate_loan_repayments
+      - calculate_stamp_duty
+      - calculate_borrowing_capacity
+    PropertyInsightService:
+      - get_matched_addresses_v2
+      - post_matched_addresses_v2
+      - get_property_valuation
+      - get_homeloan_products
+
+# Agent to environment variable mapping
+# Maps each agent to its corresponding cache path environment variable
+agent_env_var_mapping:
+  savings_agent: SAVINGS_AGENT_MOCK_READ_API_CACHE_PATH
+  products_agent: PRODUCTS_AGENT_MOCK_READ_API_CACHE_PATH
+  home_buying_agent: HOME_BUYING_AGENT_MOCK_READ_API_CACHE_PATH

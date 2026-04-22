@@ -1,0 +1,56 @@
+services:
+    financial_companion_gradio_app:
+        build:
+            target: base
+            context: .
+            dockerfile: apps/gradio/Dockerfile
+        depends_on:
+            financial_companion_postgres:
+                condition: service_healthy
+        develop:
+            watch:
+                - action: sync
+                  path: ./apps/gradio/gradio_fc.py
+                  target: /opt/defaultsite/gradio_fc.py
+                - action: sync
+                  path: ./apps/gradio/gradio_styles.css
+                  target: /opt/defaultsite/gradio_styles.css
+                - action: sync
+                  path: ./apps/gradio/gradio_utils.py
+                  target: /opt/defaultsite/gradio_utils.py
+                - action: sync
+                  path: .envs/shared/.env.local
+                  target: /opt/defaultsite/envs/shared/.env.local
+        entrypoint:
+            - sh
+            - -c
+            - |
+              # Auto-detect git branch for local development
+              if [ -d .git ]; then
+                export GIT_BRANCH=$$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "unknown")
+              else
+                export GIT_BRANCH="unknown"
+              fi
+              echo "Running Gradio with branch: $$GIT_BRANCH"
+              gradio gradio_fc.py
+        environment:
+            - FINANCIAL_COMPANION_API_BASE_URL=http://financial_companion_agent:8081
+            - GRADIO_SERVER_NAME=0.0.0.0
+            - GRADIO_SERVER_PORT=7860
+            - PYTHONUNBUFFERED=1
+            - SSL_CERT_FILE=/opt/defaultsite/ca_bundle.pem
+            - REQUESTS_CA_BUNDLE=/opt/defaultsite/ca_bundle.pem
+            - CURL_CA_BUNDLE=/opt/defaultsite/ca_bundle.pem
+        networks:
+            - agentic_network
+        ports:
+            - 7860:7860
+        volumes:
+            - ./apps/gradio/test_data:/opt/defaultsite/test_data
+            - ./apps/gradio/gradio_fc.py:/opt/defaultsite/apps/gradio/gradio_fc.py
+            - ./apps/gradio/gradio_styles.css:/opt/defaultsite/apps/gradio/gradio_styles.css
+            - ./apps/gradio/gradio_utils.py:/opt/defaultsite/apps/gradio/gradio_utils.py
+            - ./common:/opt/defaultsite/common
+            - ./envs/shared/.env.local:/opt/defaultsite/envs/shared/.env.local
+            - ${SSL_CERT_FILE}:/opt/defaultsite/ca_bundle.pem
+            - ./.git:/opt/defaultsite/.git:ro  # Mount git directory read-only for branch detection

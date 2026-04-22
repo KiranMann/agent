@@ -1,0 +1,3 @@
+volumes:
+    database_data:
+        driver: local

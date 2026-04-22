@@ -1,0 +1,66 @@
+services:
+    financial_companion_agent:
+        build:
+            target: base
+            context: .
+            dockerfile: Dockerfile.local
+        depends_on:
+            financial_companion_postgres:
+                condition: service_healthy
+            financial_companion_liquibase:
+                condition: service_completed_successfully
+        develop:
+            watch:
+                - action: sync
+                  path: ./envs/shared/.env.local
+                  target: /opt/defaultsite/envs/shared/.env.local
+                - action: sync+restart
+                  path: ./apps/companion
+                  target: /opt/defaultsite/apps/companion
+                - action: sync+restart
+                  path: ./common
+                  target: /opt/defaultsite/common
+        entrypoint:
+            - sh
+            - -c
+            - |
+              # Auto-detect git branch for local development
+              if [ -d .git ]; then
+                export GIT_BRANCH=$$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "unknown")
+              else
+                export GIT_BRANCH="unknown"
+              fi
+              echo "Running API with branch: $$GIT_BRANCH"
+              python apps/companion/app/main.py --dev --skip-auth 2>&1 | tee app.log
+        env_file:
+            - ./envs/shared/.env.local
+        environment:
+            - GITHUB_PERSONAL_ACCESS_TOKEN=${GITHUB_TOKEN}
+            - HOST=0.0.0.0
+            - A2A_SERVER_HOST=0.0.0.0
+            - DB_HOST=financial_companion_postgres
+            - REDIS_CONFIGURATION_ENDPOINT=financial_companion_redis:6379
+            - SSL_CERT_FILE=/opt/defaultsite/ca_bundle.pem
+            - REQUESTS_CA_BUNDLE=/opt/defaultsite/ca_bundle.pem
+            - CURL_CA_BUNDLE=/opt/defaultsite/ca_bundle.pem
+        logging:
+            driver: json-file
+            options:
+                max-file: "3"
+                max-size: 10m
+        networks:
+            - agentic_network
+        ports:
+            - 8081:8081
+        stdin_open: true
+        tty: true
+        volumes:
+            - ./envs/shared/.env.local:/opt/defaultsite/envs/shared/.env.local
+            - ./.env.eval:/opt/defaultsite/.env.eval
+            - ./private.key:/opt/defaultsite/private.key
+            - ${SSL_CERT_FILE}:/opt/defaultsite/ca_bundle.pem
+            - ./mock_services:/opt/defaultsite/mock_services
+            - ./common:/opt/defaultsite/common
+            - ./apps/companion:/opt/defaultsite/apps/companion
+            - ./evals:/opt/defaultsite/evals  # Mount evals directory for evaluation scripts
+            - ./.git:/opt/defaultsite/.git:ro  # Mount git directory read-only for branch detection

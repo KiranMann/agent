@@ -1,0 +1,117 @@
+# Product Agent Mock Service Configuration
+# This YAML file defines API methods and their input parameters for generating test inputs and outputs
+# for the Product Agent specifically
+#
+
+# Parameter Definitions
+# Define the possible values for reusable parameters
+parameter_definitions:
+  cba_device_id:
+    description: "Device identifier for CBA applications"
+    possible_values:
+      - "IO-Recorder"
+    default: "IO-Recorder"
+  cba_client_ip:
+    description: "Client IP address for CBA applications"
+    possible_values:
+      - "127.0.0.1"
+    default: "127.0.0.1"
+  referer:
+    description: "HTTP referer header for API requests"
+    possible_values:
+      - "https://www.commbank.com.au/netbank"
+    default: "https://www.commbank.com.au/netbank"
+  correlation_id:
+    description: "Unique correlation ID for request tracking"
+    possible_values:
+      - "test-correlation-001"
+    default: "test-correlation-001"
+  session_id:
+    description: "Session identifier for user session tracking"
+    possible_values:
+      - "test-session-001"
+    default: "test-session-001"
+
+service_modules:
+  api_services.account_services:
+    service_classes:
+      AccountServices:
+        methods:
+          get_accounts:
+            # Use parameter binding for customer identity
+            parameter_binding: "customer_identity_binding"
+            # Independent parameters (can be combined freely)
+            is_business_credit_card_enabled:
+              type: "bool"
+              is_optional: true
+              values:
+                - true
+                - false
+            # Session and tracking parameters
+            referer:
+              type: "str"
+              is_optional: false
+              values: []  # Will use values from parameter_definitions
+            correlation_id:
+              type: "str"
+              is_optional: false
+              values: []  # Will use values from parameter_definitions
+            session_id:
+              type: "str"
+              is_optional: false
+              values: []  # Will use values from parameter_definitions
+            headers:
+              type: "dict"  # Complex object with two string children
+              is_optional: true
+              values:
+                - CbaClientIp:
+                    type: "str"
+                    is_optional: false
+                    values:
+                      - "127.0.0.1"
+                  CbaDeviceId:
+                    type: "str"
+                    is_optional: false
+                    values:
+                      - "Products-Agent"
+
+          get_default_account:
+            # Use parameter binding for customer identity
+            parameter_binding: "customer_identity_binding"
+            # Session and tracking parameters
+            referer:
+              type: "str"
+              is_optional: false
+              values: []  # Will use values from parameter_definitions
+            correlation_id:
+              type: "str"
+              is_optional: false
+              values: []  # Will use values from parameter_definitions
+            session_id:
+              type: "str"
+              is_optional: false
+              values: []  # Will use values from parameter_definitions
+
+# Parameter Binding and Relationships
+parameter_bindings:
+  # Define groups of parameters that must be used together
+  customer_identity_binding:
+    description: "CIF code and Netbank ID must match for the same customer"
+    bound_parameters: ["cif_code", "netbank_id"]
+    valid_combinations:
+      - { cif_code: "545269", netbank_id: "88837700" }
+      - { cif_code: "464013", netbank_id: "61420376" }
+
+# Configuration for test data generation
+generation_config:
+  # Output format for generated test data
+  output_format: "json"  # Options: "json", "yaml", "csv"
+
+  # Parameter generation mode
+  parameter_mode: "all"  # Options: "all", "required_only", "custom"
+
+  # Test case generation limits
+  limits:
+    max_combinations_per_api: 100000  # Maximum test cases per API method
+    max_bound_combinations: 100000  # Maximum bound parameter combinations
+    max_independent_combinations: 100000  # Maximum independent parameter combinations

@@ -1,0 +1,493 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "financial-companion"
+version = "0.16.0"
+description = "Financial Companion Agent System"
+authors = [{ name = "Financial Companion Team" }]
+requires-python = ">=3.12,<4.0"
+dependencies = [
+    "a2a-sdk>=0.3.0",
+    "aiofiles>=24.1.0",
+    "alembic>=1.13.0",
+    "anyio>=4.4.0",  # not directly required, pinned by Snyk to avoid a vulnerability
+    "asgi-correlation-id==4.3.4",
+    "asyncpg==0.30.0",
+    "boto3==1.38.36",
+    "celery>=5.3.0",
+    "click>=8.1.0,<8.2.0",  # Pin to 8.1.x to satisfy python-semantic-release~=8.1.0 constraint
+    "cryptography==46.0.7",
+    "cvc5==1.3.0",
+    "defusedxml==0.7.1",
+    "duckdb==1.3.2",
+    "fastapi==0.121.2",
+    "h11>=0.16.0",  # not directly required, pinned by Snyk to avoid a vulnerability
+    "httpx>=0.27.0",
+    "jinja2==3.1.6",
+    "langfuse==2.60.7",
+    "langgraph==1.1.1",
+    "langgraph-checkpoint==4.0.1",  # not directly required, pinned by Snyk to avoid a vulnerability
+    "langgraph-prebuilt==1.0.8",  # pinned to avoid ExecutionInfo import bug in 1.0.9+
+    "launchdarkly-server-sdk==9.12.1",
+    "litellm==1.83.0",
+    "loguru==0.7.3",
+    "markdownify==1.2.0",
+    "msgraph-sdk==1.39.0",
+    "openai==2.8.0",
+    "openai-agents==0.0.17",
+    "opentelemetry-api==1.39.0",
+    "opentelemetry-exporter-otlp==1.39.0",
+    "opentelemetry-exporter-otlp-proto-grpc>=1.20.0",
+    "opentelemetry-exporter-prometheus==0.60b0",
+    "opentelemetry-instrumentation-aiohttp-client==0.60b0",
+    "opentelemetry-instrumentation-fastapi==0.60b0",
+    "opentelemetry-sdk==1.39.0",
+    "openpyxl>=3.0.0",
+    "passlib[bcrypt]>=1.7.4",
+    "prometheus-fastapi-instrumentator==7.1.0",
+    "protego==0.3.0",
+    "psycopg[binary]==3.2.6",
+    "psycopg-pool==3.2.6",
+    "psycopg2-binary>=2.9.0",
+    "pydantic-settings>=2.0.0",
+    "pydantic>=2.0.0",
+    "pyjwt==2.12.0",
+    "python-dateutil==2.9.0.post0",
+    "python-multipart>=0.0.9",
+    "rapidfuzz==3.14.3",
+    "readabilipy==0.2.0",
+    "redis==7.3.0",
+    "requests>=2.33.0",
+    "rich>=13.8.0",
+    "scipy==1.16.1",
+    "simplejson==3.20.1",
+    "sqlalchemy>=2.0.0,<3.0.0",
+    "sse-starlette>=1.3.3",
+    "starlette==0.49.1",  # not directly required, pinned by Snyk to avoid a vulnerability
+    "structlog>=24.4.0",
+    "types-python-dateutil==2.9.0.20250516",
+    "types-pyyaml>=6.0.12.20250915",
+    "uvicorn>=0.30.0",
+    "zipp>=3.19.1",  # not directly required, pinned by Snyk to avoid a vulnerability
+    "pyasn1>=0.6.3",  # not directly required, pinned by Snyk to avoid CVE-2026-30922
+    "langchain-core>=1.2.22",  # not directly required, pinned by Snyk to avoid CVE-2026-34070
+    "pygments>=2.20.0",  # not directly required, pinned by Snyk to avoid CVE-2026-4539
+]
+
+[dependency-groups]
+dev = [
+    "black==24.10.0",         # Code formatter
+    "boto3-stubs==1.38.12",   # Type stubs for boto3 (dev-only)
+    "factory-boy==3.3.1",     # Test data factories
+    "faker==30.3.0",          # Fake data generation
+    "httpx>=0.27.0",          # HTTP client for testing
+    "isort==5.13.2",          # Import sorter
+    "matplotlib==3.9.2",      # Plotting (evals)
+    "mypy==1.19.1",           # Type checker
+    "networkx==3.6.1",        # Graph utilities (evals)
+    "numpy==2.1.1",           # Numerical computing (evals)
+    "pandas==2.3.2",          # Data analysis (evals)
+    "pandas-stubs==2.3.0.250703",  # Type stubs for pandas
+    "plotly==6.3.1",          # Interactive plotting (evals)
+    "pre-commit==4.2.0",      # Git hooks
+    "pytest-asyncio==1.0.0",  # Async testing
+    "pytest-cov==6.2.1",      # Coverage reporting
+    "pytest-mock==3.14.0",    # Mocking utilities
+    "pytest==8.3.5",          # Testing framework
+    "python-semantic-release==10.4.1",  # Versioning (CI)
+    "PyYAML>=6.0",            # YAML parsing
+    "ruff==0.15.4",           # Modern linter and formatter
+    "scikit-learn==1.7.2",    # ML utilities (evals)
+    "seaborn==0.13.2",        # Statistical plotting (evals)
+    "tqdm==4.66.4",           # Progress bars (evals)
+    "types-defusedxml>=0.7.0", # Type stubs for defusedxml
+    "types-PyYAML>=6.0.0",    # Type stubs for PyYAML
+    "types-requests==2.32.0.20250328",  # Type stubs for requests
+    "types-simplejson==3.20.0.20250326",  # Type stubs for simplejson
+    "diff-cover==9.7.1",      # CI diff coverage tool
+]
+
+[project.optional-dependencies]
+docs = [
+    "mkdocs==1.6.1",
+    "mkdocs-material==9.5.39",
+    "mkdocs-mermaid2-plugin==1.1.1",
+]
+
+[tool.semantic_release]
+version_toml = ["pyproject.toml:project.version"]
+build_command = "echo 'No build command needed'"
+major_on_zero = false
+allow_zero_version = true
+tag_format = "{version}"
+
+
+# Python Semantic Release Configuration for python-semantic-release
+# https://python-semantic-release.readthedocs.io/
+
+[tool.semantic_release.branches.main]
+match = "main"
+prerelease = false
+
+[tool.semantic_release.branches.feature]
+match = "feat/.*"
+prerelease = true
+prerelease_token = "alpha"
+
+[tool.semantic_release.branches.chore]
+match = "chore/.*"
+
+[tool.semantic_release.changelog]
+exclude_commit_patterns = [
+    "^Merge pull request",
+    "^Merge branch",
+    "^Bump version",
+]
+
+# Ruff Configuration - Primary Linter
+[tool.ruff]
+line-length = 120
+target-version = "py313"
+
+# Standard excludes for build/cache directories
+exclude = [
+    "__pypackages__",
+    "_build",
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git-rewrite",
+    ".git",
+    ".hg",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    "buck-out",
+    "build",
+    "dist",
+    "evals",
+    "mock_services",
+    "node_modules",
+    "tests",
+    "venv",
+]
+
+[tool.ruff.lint]
+select = [
+    "ARG",  # flake8-unused-arguments
+    "B",    # flake8-bugbear
+    "C4",   # flake8-comprehensions
+    "C90",  # mccabe complexity
+    "D",    # pydocstyle
+    "E",    # pycodestyle errors
+    "ERA",  # eradicate (commented code)
+    "F",    # Pyflakes
+    "FLY",  # flynt
+    "I",    # isort
+    "N",    # pep8-naming
+    "PERF", # perflint
+    "PL",   # pylint
+    "RUF",  # Ruff-specific rules
+    "S",    # bandit security
+    "SIM",  # flake8-simplify
+    "T20",  # flake8-print
+    "TCH",  # flake8-type-checking
+    "TID252",   # relative-imports - disallow relative imports
+    "TRY",  # tryceratops
+    "UP",   # pyupgrade
+    "W",    # pycodestyle warnings
+]
+
+ignore = [
+    "B008",    # Do not perform function calls in argument defaults
+    "C901",    # Too complex (will be handled gradually)
+    "D100",    # Missing docstring in public module
+    "D101",    # Missing docstring in public class
+    "D102",    # Missing docstring in public method
+    "D103",    # Missing docstring in public function
+    "D104",    # Missing docstring in public package
+    "D105",    # Missing docstring in magic method
+    "E501",    # Line too long (handled by Black)
+    "PLR0911", # Too many return statements (acceptable for complex functions)
+    "PLR0912", # Too many branches
+    "PLR0913", # Too many arguments to function call
+    "PLR0915", # Too many statements
+    "S101",    # Use of assert (common in tests)
+    "TRY002",  # Create your own exception
+    "TRY003",  # Avoid specifying long messages outside the exception class
+    "TRY004",  # Prefer TypeError exception for invalid type (acceptable to use ValueError)
+    "TRY300",  # Use 'except*' for catching multiple exceptions
+    "TRY301",  # Use 'except*' for catching multiple exceptions
+]
+
+[tool.ruff.lint.flake8-tidy-imports]
+ban-relative-imports = "all"
+
+[tool.ruff.lint.isort]
+known-first-party = [
+    "agent_services",
+    "all_agents",
+    "api_services",
+    "app",
+    "apps",
+    "common",
+    "conftest",
+    "db",
+    "evals",
+    "financial_companion_agent_service",
+    "genai",
+    "gradio",
+    "gradio_utils",
+    "mock_services",
+    "scripts",
+    "sync_prompts",
+    "test_data",
+    "tests",
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = ["S101", "S105", "ARG", "T20", "D", "PLR2004"]
+"**/test_*.py" = ["S101", "S105", "ARG", "T20", "D", "PLR2004"]
+"scripts/**/*.py" = ["TRY400", "PERF401", "ARG", "T20", "PLR2004", "D", "S101", "S105"]  # scripts allow prints, magic values, unused args
+"evals/**/*.py" = ["B007", "RUF012", "PLC0206", "SIM102", "PERF401", "PERF403", "TRY401", "N813", "RUF043", "F401", "PLW0603", "E402", "S101", "S105", "ARG", "T20", "D", "PLR2004"]
+"mock_services/**/*.py" = ["S101", "T20", "D", "N818", "ARG", "PLR2004"]  # mock services allow non-Error exception names, unused args, magic values
+"**/conftest.py" = ["D"]
+
+[tool.ruff.lint.mccabe]
+max-complexity = 10
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
+docstring-code-format = true
+
+# MyPy Configuration - Type Checking
+[tool.mypy]
+python_version = "3.13"
+strict = true
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_any_generics = true
+disallow_subclassing_any = true
+disallow_untyped_calls = true
+disallow_untyped_decorators = false
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_any_unimported = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
+disable_error_code = [
+    "import-not-found",
+    "no-any-unimported",
+    "misc",
+]
+plugins = ["pydantic.mypy"]
+
+# Control how mypy follows imports
+# "normal" - follow and report errors (default)
+# "silent" - follow but only report errors in files explicitly passed
+# "skip" - don't follow imports at all (not recommended)
+# "error" - treat imports as errors
+follow_imports = "silent"
+
+# Standard excludes for build/cache directories and non-Python files
+exclude = [
+    "^third_party/.*$",
+    "^\\.venv/.*$",
+    "^venv/.*$",
+    "^env/.*$",
+    "^build/.*$",
+    "^dist/.*$",
+    "^\\.mypy_cache/.*$",
+    "^\\.git/.*$",
+    "^apps/rag-sync/.*$",
+    "^apps/sso-rag/.*$",
+]
+
+# Ignore errors in legacy/external modules that don't have proper type stubs
+[[tool.mypy.overrides]]
+module = [
+    "evals.*",
+    "evals-aer.*",
+    "mock_services.*",
+    "test_data.*",
+    "tests.*",
+    "defusedxml.*",
+]
+ignore_errors = true
+
+# Third-party libraries without proper type stubs
+[[tool.mypy.overrides]]
+module = [
+    # AWS and databases
+    "boto3.*",
+    "botocore.*",
+    "redis.*",
+    "psycopg_pool.*",
+    "sqlalchemy.*",
+    "alembic.*",
+
+    # Web frameworks and HTTP
+    "fastapi.*",
+    "uvicorn.*",
+    "httpx.*",
+    "requests.*",
+    "simplejson.*",
+
+    # Data validation and serialization
+    "pydantic.*",
+    "pandas.*",
+
+    # Logging and monitoring
+    "structlog.*",
+    "rich.*",
+    "langfuse.*",
+
+    # Testing
+    "pytest.*",
+
+    # Agent framework and workflow
+    "agents.*",    # Has py.typed but mypy can't find it in this environment
+    "langgraph.*",
+    "cvc5.*",       # No type stubs available
+
+    # Background processing
+    "celery.*",
+]
+ignore_missing_imports = true
+
+# Coverage Configuration
+[tool.coverage.run]
+source = ["all_agents/"]
+omit = [
+    "*/tests/*",
+    "*/*test*.py",
+    "*/evals/*/test_data/*",
+    "*/mock_data/*",
+    "*/__pycache__/*",
+    "*/migrations/*",
+    "*/venv/*",
+    "*/.venv/*",
+    "evals/*",
+    "evals-aer/*",
+    "mock_services/*",
+    "gradio_fc.py",
+    "sync_prompts.py",
+]
+branch = true
+[tool.semantic_release.remote]
+name = "origin"
+type = "github"
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = false
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "def __str__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+    "class .*\\bProtocol\\):",
+    "@(abc\\.)?abstractmethod",
+]
+
+[tool.coverage.html]
+directory = "htmlcov"
+
+[tool.coverage.xml]
+output = "coverage.xml"
+
+# Semantic Release Configuration
+[tool.semantic_release.commit_parser_options]
+allowed_tags = [
+    "build",
+    "chore",
+    "ci",
+    "docs",
+    "feat",
+    "fix",
+    "other",
+    "perf",
+    "refactor",
+    "style",
+    "test",
+]
+minor_tags = ["feat"]
+patch_tags = [
+    "build",
+    "chore",
+    "ci",
+    "docs",
+    "fix",
+    "perf",
+    "refactor",
+    "style",
+    "test",
+]
+
+# Pytest Configuration
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = [
+    "--strict-markers",
+    "--strict-config",
+    "--cov=.",
+    "--cov-report=term-missing",
+    "--cov-report=xml:coverage.xml",
+    "--ignore=tests/evals",
+    "--ignore=mock_services",
+]
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+    "unit: marks tests as unit tests",
+    "e2e: marks tests as end-to-end tests",
+]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+
+# Bandit Security Configuration (integrated with Ruff)
+[tool.bandit]
+exclude_dirs = ["tests", "evals", "evals-aer", "mock_services"]
+skips = ["B101", "B601"]                           # Skip assert_used and shell_injection in tests
+
+# Additional tool configurations for compatibility
+[tool.setuptools]
+py-modules = []
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["all_agents.task_agents.investinghub_agent*"]
+exclude = ["tests*", "evals*", "mock_services*"]
+
+[tool.semantic_release.publish]
+dist_glob_patterns = ["dist/*"]
+upload_to_vcs_release = true
+
+[[tool.uv.index]]
+url = "https://artifactory.internal.cba/artifactory/api/pypi/org.python.pypi/simple"
+default = true

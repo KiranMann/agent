@@ -1,0 +1,82 @@
+# syntax=docker/dockerfile:1
+FROM applicationinfrastructure-public.docker.internal.cba/ca-certificates:latest AS certificates
+FROM applicationinfrastructure-public.docker.internal.cba/library/python:3.12-slim@sha256:d9a9a1b7265f2c3ea499b6367434853072b0e4abd376a5a79626a14d655eb079 AS bookworm-repo-settings
+
+FROM hub.docker.internal.cba/python:3.13-slim-bookworm AS base
+
+COPY --from=certificates roots/ /etc/ssl/certs
+COPY --from=certificates internal/ /usr/local/share/ca-certificates/
+COPY --from=bookworm-repo-settings /etc/apt/sources.list.d/debian.sources /etc/apt/sources.list.d/debian.sources
+
+# Combine certificate update and package installation
+RUN update-ca-certificates && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends curl && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+WORKDIR /opt/defaultsite
+
+# Set environment variables early
+ENV SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt \
+    REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt \
+    SSL_ALB_CERT_PATH=/etc/ssl/certs/dhp-self-signed-cert-for-instance.crt \
+    SSL_ALB_KEY_PATH=/etc/ssl/private/dhp-self-signed-cert-for-instance.key \
+    APP_NAME=companion \
+    PYTHONPATH=/opt/defaultsite
+
+# Copy lock files first for better layer caching
+COPY pyproject.toml uv.lock dhp-gen-self-signed-cert.sh ./
+
+# Install uv and Python dependencies
+RUN pip install uv==0.10.11 \
+    --no-cache-dir \
+    --index-url https://artifactory.internal.cba/artifactory/api/pypi/org.python.pypi/simple && \
+    uv sync --frozen --no-dev --no-cache --no-install-project
+
+# Configure PATH to use uv virtual environment
+ENV VIRTUAL_ENV=/opt/defaultsite/.venv \
+    PATH="/opt/defaultsite/.venv/bin:$PATH"
+
+# Install observability from private PyPI (credentials mounted as build secrets)
+# Known limitation: these packages are installed outside uv.lock because the private registry
+# requires credentials unavailable during `uv lock`. Their transitive deps are therefore not
+# pinned — langgraph-prebuilt is explicitly pinned to ==1.0.8 to prevent observability from
+# upgrading past the ExecutionInfo bug introduced in 1.0.9+.
+RUN --mount=type=secret,id=artifactory_user \
+    --mount=type=secret,id=artifactory_key \
+    uv pip install --no-cache \
+    --index-url "https://$(cat /run/secrets/artifactory_user):$(cat /run/secrets/artifactory_key)@artifactory.internal.cba/artifactory/api/pypi/dea-observability-pypi/simple/" \
+    "observability" "langgraph-prebuilt==1.0.8"
+
+# Generate certificates
+RUN ./dhp-gen-self-signed-cert.sh
+
+# Copy application code (in order of change frequency - least to most)
+COPY common ./common
+COPY apps/companion/ ./apps/companion/
+
+# Copy environment files
+COPY envs/shared/ ./envs/shared/
+COPY envs/companion/ ./envs/companion/
+
+# NOTE: Stop base stage here. It intentionally omits runtime PORT/HOST/ENTRYPOINT so
+# local docker-compose can target this stage ("target: base") and inject its own.
+
+FROM base AS ci
+ENV PORT=8080 \
+	HOST=0.0.0.0 \
+	AGENT=FinancialCompanionAgent
+
+ARG ENTRY_POINT
+ENV ENTRY_POINT=${ENTRY_POINT}
+
+# Accept GIT_BRANCH, VERSION, and TAG as build arguments and set as environment variables
+ARG GIT_BRANCH=unknown
+ARG VERSION=unknown
+ARG TAG=unknown
+ENV GIT_BRANCH=${GIT_BRANCH} \
+    APP_VERSION=${VERSION} \
+    APP_TAG=${TAG}
+
+ENTRYPOINT ["sh", "-c", "${ENTRY_POINT}"]

@@ -1,0 +1,15 @@
+include:
+    - path: docker/common/networks.yaml
+      project_directory: .
+    - path: docker/infrastructure/postgres.yaml
+      project_directory: .
+    - path: docker/infrastructure/liquibase.yaml
+      project_directory: .
+    - path: docker/services/agent.evals.yaml
+      project_directory: .
+
+services:
+    financial_companion_agent:
+        build:
+            context: .
+            dockerfile: Dockerfile.evals

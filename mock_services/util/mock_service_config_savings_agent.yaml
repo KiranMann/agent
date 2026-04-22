@@ -1,0 +1,442 @@
+# Savings Agent Mock Service Configuration
+# This YAML file defines API methods and their input parameters for generating test inputs and outputs
+# for the Savings Agent specifically
+#
+
+# Parameter Definitions
+# Define the possible values for reusable parameters
+parameter_definitions:
+  cba_device_id:
+    description: "Device identifier for CBA applications"
+    possible_values:
+      - "IO-Recorder"
+    default: "IO-Recorder"
+  cba_client_ip:
+    description: "Client IP address for CBA applications"
+    possible_values:
+      - "127.0.0.1"
+    default: "127.0.0.1"
+  referer:
+    description: "HTTP referer header for API requests"
+    possible_values:
+      - "https://www.commbank.com.au/netbank"
+    default: "https://www.commbank.com.au/netbank"
+  correlation_id:
+    description: "Unique correlation ID for request tracking"
+    possible_values:
+      - "test-correlation-001"
+    default: "test-correlation-001"
+  session_id:
+    description: "Session identifier for user session tracking"
+    possible_values:
+      - "test-session-001"
+    default: "test-session-001"
+
+service_modules:
+  api_services.cashflow_service:
+    service_classes:
+      CashflowService:
+        methods:
+          get_account_settings:
+            # Use parameter binding for customer identity
+            parameter_binding: "customer_identity_binding"
+            cba_device_id:
+              type: "str"
+              is_optional: false
+              values: []  # Will use values from parameter_definitions
+            cba_client_ip:
+              type: "str"
+              is_optional: true
+              values: []  # Will use values from parameter_definitions
+            # Session and tracking parameters
+            referer:
+              type: "str"
+              is_optional: false
+              values: []  # Will use values from parameter_definitions
+            correlation_id:
+              type: "str"
+              is_optional: false
+              values: []  # Will use values from parameter_definitions
+            session_id:
+              type: "str"
+              is_optional: false
+              values: []  # Will use values from parameter_definitions
+
+          get_all_account_transactions:
+            # Use combined binding for customer + account + date range
+            parameter_binding: ["account_customer_binding", "date_range_binding"]
+            # Note: account_hash will be dynamically generated based on customer binding
+            cba_device_id:
+              type: "str"
+              is_optional: false
+              values: []  # Will use values from parameter_definitions
+            cba_client_ip:
+              type: "str"
+              is_optional: true
+              values: []  # Will use values from parameter_definitions
+            # Session and tracking parameters
+            referer:
+              type: "str"
+              is_optional: false
+              values: []  # Will use values from parameter_definitions
+            correlation_id:
+              type: "str"
+              is_optional: false
+              values: []  # Will use values from parameter_definitions
+            session_id:
+              type: "str"
+              is_optional: false
+              values: []  # Will use values from parameter_definitions
+
+  api_services.spendlimits_service:
+    service_classes:
+      SpendLimitsService:
+        methods:
+          get_cycle_settings:
+            # Use parameter binding for customer identity
+            parameter_binding: "customer_identity_binding"
+            cba_client_ip:
+              type: "str"
+              is_optional: true
+              values: []  # Will use values from parameter_definitions
+            # Session and tracking parameters
+            referer:
+              type: "str"
+              is_optional: false
+              values: []  # Will use values from parameter_definitions
+            correlation_id:
+              type: "str"
+              is_optional: false
+              values: []  # Will use values from parameter_definitions
+            session_id:
+              type: "str"
+              is_optional: false
+              values: []  # Will use values from parameter_definitions
+
+          update_cycle_settings:
+            # Use parameter binding for customer identity
+            parameter_binding: "customer_identity_binding"
+            # Method-specific required parameters
+            cycle_settings:
+              type: "dict"  # Complex object with nested enum and datetime
+              is_optional: false
+              values:
+                - frequency:
+                    type: "enum"
+                    enum_class: "all_agents.task_agents.savings_agent.tools.models.Frequency"
+                    is_optional: false
+                    values:
+                      - "WEEKLY"
+                      - "FORTNIGHTLY"
+                      - "MONTHLY"
+                  cycleSeedDate:
+                    type: "datetime"
+                    is_optional: false
+                    values:
+                      - "2025-09-01T00:00:00"
+            # Session and tracking parameters (REQUIRED for this method)
+            referer:
+              type: "str"
+              is_optional: false
+              values: []  # Will use values from parameter_definitions
+            correlation_id:
+              type: "str"
+              is_optional: false
+              values: []  # Will use values from parameter_definitions
+            session_id:
+              type: "str"
+              is_optional: false
+              values: []  # Will use values from parameter_definitions
+            # Optional parameters
+            cba_client_ip:
+              type: "str"
+              is_optional: true
+              values: []  # Will use values from parameter_definitions
+
+          get_all_categories:
+            # Use parameter binding for customer identity
+            parameter_binding: "customer_identity_binding"
+            cba_client_ip:
+              type: "str"
+              is_optional: true
+              values: []  # Will use values from parameter_definitions
+            # Session and tracking parameters
+            referer:
+              type: "str"
+              is_optional: false
+              values: []  # Will use values from parameter_definitions
+            correlation_id:
+              type: "str"
+              is_optional: false
+              values: []  # Will use values from parameter_definitions
+            session_id:
+              type: "str"
+              is_optional: false
+              values: []  # Will use values from parameter_definitions
+
+          get_category_transactions:
+            # Use parameter binding for customer identity
+            parameter_binding: "customer_identity_binding"
+
+            # Method-specific required parameters
+            category:
+              type: "str"
+              is_optional: false
+              values:
+                - "Groceries"
+                - "Entertainment"
+                - "Shopping"
+            # Session and tracking parameters (REQUIRED for this method)
+            referer:
+              type: "str"
+              is_optional: false
+              values: []  # Will use values from parameter_definitions
+            correlation_id:
+              type: "str"
+              is_optional: false
+              values: []  # Will use values from parameter_definitions
+            session_id:
+              type: "str"
+              is_optional: false
+              values: []  # Will use values from parameter_definitions
+            # Optional parameters
+            cba_client_ip:
+              type: "str"
+              is_optional: true
+              values: []  # Will use values from parameter_definitions
+            cycle_index:
+              type: "int"
+              is_optional: true
+              values:
+                - 0
+                - 1
+                - 2
+            frequency:
+              type: "enum"
+              enum_class: "all_agents.task_agents.savings_agent.tools.models.Frequency"
+              is_optional: true
+              values:
+                - "WEEKLY"
+                - "FORTNIGHTLY"
+                - "MONTHLY"
+            cycle_restart_date:
+              type: "datetime"
+              is_optional: true
+              values:
+                - "2025-09-01T00:00:00"
+
+  api_services.shopping_deals_service:
+    service_classes:
+      ShoppingDealsServices:
+        methods:
+          get_offers:
+            # Use parameter binding for customer identity
+            parameter_binding: "customer_identity_binding"
+            cba_client_ip:
+              type: "str"
+              is_optional: true
+              values: []  # Will use values from parameter_definitions
+            # Session and tracking parameters
+            referer:
+              type: "str"
+              is_optional: false
+              values: []  # Will use values from parameter_definitions
+            correlation_id:
+              type: "str"
+              is_optional: false
+              values: []  # Will use values from parameter_definitions
+            session_id:
+              type: "str"
+              is_optional: false
+              values: []  # Will use values from parameter_definitions
+
+  api_services.billhub_service:
+    service_classes:
+      BillHubService:
+        methods:
+          get_predicted_bills:
+            # Use parameter binding for customer identity
+            parameter_binding: "customer_identity_binding"
+            # Method-specific required parameters
+            statuses:
+              type: "str"
+              is_optional: false
+              values:
+                - "Confirmed,AutoConfirmed"
+                - "Confirmed"
+                - "AutoConfirmed"
+            cba_client_ip:
+              type: "str"
+              is_optional: true
+              values: []  # Will use values from parameter_definitions
+            # Session and tracking parameters
+            referer:
+              type: "str"
+              is_optional: false
+              values: []  # Will use values from parameter_definitions
+            correlation_id:
+              type: "str"
+              is_optional: false
+              values: []  # Will use values from parameter_definitions
+            session_id:
+              type: "str"
+              is_optional: false
+              values: []  # Will use values from parameter_definitions
+          get_bill_instances:
+            # Use parameter binding for customer identity
+            parameter_binding: "customer_identity_binding"
+            # Method-specific required parameters
+            cba_client_ip:
+              type: "str"
+              is_optional: true
+              values: []  # Will use values from parameter_definitions
+            # Session and tracking parameters
+            referer:
+              type: "str"
+              is_optional: false
+              values: []  # Will use values from parameter_definitions
+            correlation_id:
+              type: "str"
+              is_optional: false
+              values: []  # Will use values from parameter_definitions
+            session_id:
+              type: "str"
+              is_optional: false
+              values: []  # Will use values from parameter_definitions
+
+  api_services.savings_goals_service:
+    service_classes:
+      SavingsGoalsService:
+        methods:
+          get_goals:
+            # Use parameter binding for customer identity
+            parameter_binding: "customer_identity_binding"
+            cba_client_ip:
+              type: "str"
+              is_optional: true
+              values: []  # Will use values from parameter_definitions
+            # Session and tracking parameters
+            referer:
+              type: "str"
+              is_optional: false
+              values: []  # Will use values from parameter_definitions
+            correlation_id:
+              type: "str"
+              is_optional: false
+              values: []  # Will use values from parameter_definitions
+            session_id:
+              type: "str"
+              is_optional: false
+              values: []  # Will use values from parameter_definitions
+          get_goal:
+            parameter_binding: "customer_identity_binding"
+            goal_id:
+              type: "str"
+              is_optional: false
+              values:
+                - "021f25ca-ad61-1fe0-a4d4-af9472d4f04a"
+            # Session and tracking parameters
+            referer:
+              type: "str"
+              is_optional: false
+              values: []  # Will use values from parameter_definitions
+            correlation_id:
+              type: "str"
+              is_optional: false
+              values: []  # Will use values from parameter_definitions
+            session_id:
+              type: "str"
+              is_optional: false
+              values: []  # Will use values from parameter_definitions
+
+  api_services.accounts_edge_service:
+    service_classes:
+      AccountsEdgeService:
+        methods:
+          get_accounts:
+            # Use parameter binding for customer identity
+            parameter_binding: "customer_identity_binding"
+            customer_details:
+              type: "dict"
+              is_optional: false
+              values:
+                - {"dptoken": "mock-dp-token-999888", "netbank_id": "88837799"}
+            # Session and tracking parameters
+            referer:
+              type: "str"
+              is_optional: false
+              values: []  # Will use values from parameter_definitions
+            correlation_id:
+              type: "str"
+              is_optional: false
+              values: []  # Will use values from parameter_definitions
+            session_id:
+              type: "str"
+              is_optional: false
+              values: []  # Will use values from parameter_definitions
+
+
+# Parameter Binding and Relationships
+parameter_bindings:
+  # Define groups of parameters that must be used together
+  customer_identity_binding:
+    description: "CIF code and Netbank ID must match for the same customer"
+    bound_parameters: ["cif_code", "netbank_id"]
+    valid_combinations:
+      - { cif_code: "545269", netbank_id: "88837700" }
+      - { cif_code: "464013", netbank_id: "61420376" }
+  # TODO: Re-enable once we can support multiple bindings
+  # frequency_and_restart_cycle_date_binding:
+  #   description: "Frequency and restart cycle date should be used together"
+  #   bound_parameters: ["frequency", "cycle_restart_date"]
+  #   valid_combinations:
+  #     - { frequency: "WEEKLY", cycle_restart_date: "2025-09-01T00:00:00" }
+  #     - { frequency: "FORTNIGHTLY", cycle_restart_date: "2025-09-01T00:00:00" }
+  #     - { frequency: "MONTHLY", cycle_restart_date: "2025-09-01T00:00:00" }
+
+  account_customer_binding:
+    description: "Account hashes belong to specific customers"
+    bound_parameters: ["cif_code", "netbank_id", "account_hash"]
+    valid_combinations:
+      - { cif_code: "545269", netbank_id: "88837700", account_hash: "62d53c2a425b78947518e601ad4586db0746713c" }
+      - { cif_code: "545269", netbank_id: "88837700", account_hash: "a17a349263d5b8e4b29bec74a7e33bdfd7ff054a" }
+      - { cif_code: "545269", netbank_id: "88837700", account_hash: "e5ba5fdf6ae42254332b13650006fb96312b2719" }
+      - { cif_code: "464013", netbank_id: "61420376", account_hash: "6fee5d0944234432df83ad2aa1bc6b57166eb44a" }
+      - { cif_code: "464013", netbank_id: "61420376", account_hash: "7ed13dba66d2a409a0f74ebe7904e1277805b3f9" }
+      - { cif_code: "464013", netbank_id: "61420376", account_hash: "38e04548e5e4eb3760f0b2e533f0297e41190293" }
+      - { cif_code: "464013", netbank_id: "61420376", account_hash: "fb19d242f5e269148e2564ee4117092c3016dbd4" }
+      - { cif_code: "464013", netbank_id: "61420376", account_hash: "604e81f3df899a579ad65c07559116a16385f0ed" }
+      - { cif_code: "464013", netbank_id: "61420376", account_hash: "3a5748f8d57ecb9ffcdecd626d61047560aac7c4" }
+      - { cif_code: "464013", netbank_id: "61420376", account_hash: "829ef85b93f0c6069c1d3f93dd88a921fd2f132d" }
+      - { cif_code: "464013", netbank_id: "61420376", account_hash: "e5647ac9ade513fd75ac80ac38358608f1e168ee" }
+      - { cif_code: "464013", netbank_id: "61420376", account_hash: "9f79d1721a436a93accdf7490895b83c717dbb0f" }
+      - { cif_code: "464013", netbank_id: "61420376", account_hash: "c9b92221cc7a3c4e6c1327bbd3aa6a67ddbbcabb" }
+      - { cif_code: "464013", netbank_id: "61420376", account_hash: "902e275e296a2864ecdcab9cbd088d6eca8e1c8f" }
+      - { cif_code: "464013", netbank_id: "61420376", account_hash: "41c70cb89f4a5f6ed1dc9949655d3823292784a2" }
+      - { cif_code: "464013", netbank_id: "61420376", account_hash: "d844edf53cdabcaebcb082ee05cff65f7e252bc4" }
+      - { cif_code: "464013", netbank_id: "61420376", account_hash: "98761720ba533a973dd579e47c5beb130b51c881" }
+      - { cif_code: "464013", netbank_id: "61420376", account_hash: "5a2ab423e9a411cac567b90c88fe776c5cd6698b" }
+      - { cif_code: "464013", netbank_id: "61420376", account_hash: "f7b647022b0ac08aca7bf9c0a14a475dc5d8590c" }
+      # TODO: This account hash causes errors in the API, need to investigate further
+      # - { cif_code: "464013", netbank_id: "61420376", account_hash: "46543dbcf23b2a953b82de2f6d93d38fff89260a" }
+
+  date_range_binding:
+    description: "From date must be before to date"
+    bound_parameters: ["from_date", "to_date"]
+    constraint_type: "date_range"  # Special constraint type
+    valid_combinations:
+      - { from_date: "2023-09-24", to_date: "2025-09-24" }
+
+# Configuration for test data generation
+generation_config:
+  # Output format for generated test data
+  output_format: "json"  # Options: "json", "yaml", "csv"
+
+  # Parameter generation mode
+  parameter_mode: "all"  # Options: "all", "required_only", "custom"
+
+  # Test case generation limits
+  limits:
+    max_combinations_per_api: 100000  # Maximum test cases per API method
+    max_bound_combinations: 100000  # Maximum bound parameter combinations
+    max_independent_combinations: 100000  # Maximum independent parameter combinations

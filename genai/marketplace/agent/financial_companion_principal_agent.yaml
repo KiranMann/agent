@@ -1,0 +1,70 @@
+id: "c0c6a0d7-a48f-45ad-832e-b4b134b19f7d"
+name: "Financial Companion Principal Agent"
+agent_level: 3 # (1-5)
+agent_type: "PRINCIPAL" # (PRINCIPAL | TASK | SERVICE)
+description: |
+  Financial Companion is a multi-agent financial services system that provides personalized financial advice and assistance to CBA customers through intelligent conversation and analysis.
+deployment_environments:
+  - environment: "development"
+    url: "https://d-s-agenticai-app-alb.dotdtdp03dev01.aws.test.au.internal.cba/stream/conversations/interaction"
+    description: "Dev environment for testing."
+    version: "1.0.0"
+    capabilities: ### Optional
+  - environment: "test"
+    url: "https://t2-s-agenticai-app-alb.dotdtdp03test201.aws.test.au.internal.cba/stream/conversations/interaction"
+    description: "Test2 environment for testing."
+    version: "1.0.0"
+  - environment: "staging"
+    url: "https://stg01.edge-retail.stg.aws.groupapi.cba:8443/xapi/session-dialogue/money-management/financialcompanion/v1/message/conversation"
+    description: "Staging environment for testing."
+    version: "1.0.0"
+  - environment: "production"
+    url: "https://prod01.edge-retail.prod.aws.groupapi.cba:8443/xapi/session-dialogue/money-management/financialcompanion/v1/message/conversation"
+    description: "Production environment for live usage."
+    version: "1.0.0"
+agent_dependencies:
+  - name: "Homebuying Subagent"
+    version: "1.0.0"
+    description: "Home loans, property purchase, borrowing power, valuations, government grants"
+  - name: "Products Subagent"
+    version: "1.0.0"
+    description: "Banking product information (non-home-loan), existing account details"
+  - name: "Savings Subagent"
+    version: "1.0.0"
+    description: "Transaction analysis, budgeting, savings goals, bills, affordability questions"
+  - name: "General Queries Subagent"
+    version: "1.0.0"
+    description: "Greetings, fully unclear intent, basic account holdings — last resort only"
+usage_scope: Private
+contact_information:
+  escalation_contact: "Caitlin.Keogh1@cba.com.au"
+  frontdoor_url: "https://commbank.atlassian.net/example-front-door-request-portal"
+  business_unit: "Retail Technology"
+  crew: "Digital"
+
+target:
+  - https://marketplace.genai.cba
+
+risk_considerations:
+  # Required fields
+  critical_ops_id: "NA"
+  evaluation_monitoring_link: "NA"
+  GMR_link: "NA"
+  data_classification: "CustomerPersonal"
+  sensitive_personal_information: true
+  cross_border_data: false
+  customer_facing: true
+  obligation_summary_id: "NA"
+  it_service: "CI107355678"
+  finops_tag: "NA"
+
+  # Optional fields
+  inherent_risk_rating: null
+  risk_domain: null
+  risk_assessment_latest_date: null
+  risk_owner_name: null
+  human_in_the_loop_required: true
+  model_version: null
+  model_provider: null
+  data_accessed: []
+  target_user_segment: "NA"

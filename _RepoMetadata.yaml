@@ -1,0 +1,36 @@
+ApplicationMappings:
+  ApplicationServiceCINum: CI107355678
+  BusinessAppName: Financial Companion
+  BusinessUnit: Retail Banking Services
+  Domain: Customer, Digital and AI
+  Crew: Digital
+  Squad: Financial Companion
+  OwnershipTracked: true
+ApplicationCertifications:
+    CIReferenceId: c3c8687d-9f22-4877-b766-0675c4d9b5de
+    FastTrackRelease:
+        IsCertified: True
+        CertifiedBy: Aurélien Gaudin
+        CertifiedOn: 2025-10-27
+TestingOwners:
+  FUNCTIONAL_TESTING:
+  - Aurelien-Gaudin_cba
+  - Gaurav-Verma_cba
+  - Lina-Ye_cba
+  - Gryff-Priest_cba
+  - Akhil-SreekumarannairKumar_cba
+  - Sivaraj-Subramanian_cba
+  NON_FUNCTIONAL_TESTING:
+  - Aurelien-Gaudin_cba
+  - Gaurav-Verma_cba
+  - Lina-Ye_cba
+  - Gryff-Priest_cba
+  - Akhil-SreekumarannairKumar_cba
+  - Sivaraj-Subramanian_cba
+  PENETRATION_TESTING:
+  - Aurelien-Gaudin_cba
+  - Gaurav-Verma_cba
+  - Lina-Ye_cba
+  - Gryff-Priest_cba
+  - Akhil-SreekumarannairKumar_cba
+  - Sivaraj-Subramanian_cba

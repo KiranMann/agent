@@ -1,0 +1,68 @@
+# Patchwerk Configuration File
+# https://ai-powered-engineering.pages.commbank.io/project-coral/installation/configuration-setup
+
+# Information about the project for metric and categorisation purposes
+project:
+  # Business Unit (e.g. Technology - Digital, Technology - BB, Technology - CDAO, Chief Operations Office, Other etc.)
+  business_unit: Retail Technology
+  # Crew (e.g. Platform Modernisation, Engineering Pathways, Apply With Ease, etc.)
+  crew: Financial Companion
+
+# GitHub Token can be set via GITHUB_TOKEN, GITHUB_PERSONAL_ACCESS_TOKEN env var for local use. This is automatically set when running on GitHub.
+
+sonarqube:
+  project_keys:
+    - "CBA-General_FinancialCompanion_80f45046-096b-4a2d-86c6-df67261e0845"
+
+snyk:
+  project_ids:
+    - "8d7f7e5e-79ca-4ba1-8ea1-4d19da4b226e"
+  org_id: "eb6b17eb-36ec-4671-892c-f86ae0fd0ff7" # Can be set via SNYK_ORG_ID env var
+
+observe:
+  datasets: {}
+
+# AI Tool behaviour and model configuration
+ai:
+  default_tool: "claude" # Can be set via PATCHWERK_AI_DEFAULT_TOOL env var
+  default_model: "bedrock-claude-4-sonnet" # Can be set via PATCHWERK_AI_DEFAULT_MODEL env var
+  debug_mode: false # Can be set via PATCHWERK_AI_DEBUG_MODE env var, default false
+  # custom_instructions_file: "CLAUDE.md" # Path to custom instructions file (can be set via PATCHWERK_AI_CUSTOM_INSTRUCTIONS_FILE env var), default No custom instructions
+  direct_commit: true # When working on PR events, commit directly to existing branch instead of creating new PR (can be set via PATCHWERK_AI_DIRECT_COMMIT env var), default true
+  review_pr_on_open: true  # When a PR is opened, have the AI tool review it (can be set via PATCHWERK_AI_REVIEW_PR_ON_OPEN env var), default true
+  # Branch naming conventions
+  branch_prefixes:
+    - feat
+    - fix
+
+sync:
+  # Options: ["sonarqube_issues", "snyk_issues", "coverage", "observe"]
+  issues_to_sync: ["sonarqube_issues", "snyk_issues", "coverage"]
+  sonarqube_issues:
+    num_batches: 5 # Number of batches to sync for SonarQube issues (default: 5)
+    batch_limit: 5 # Maximum number of issues per batch (default: 5)
+    # Minimum severity to sync issues, can be set to "blocker", "critical", "major", "minor", "info"
+    min_severity: "critical"
+    # This will limit the number of issues that will be open for this type in GitHub
+    max_open_issues: 3 # Set to a number to limit open issues, null for no limit
+
+  snyk_issues:
+    num_batches: 3 # Number of batches to sync for Snyk issues (default: 5)
+    batch_limit: 5 # Maximum number of issues per batch (default: 5)
+    # Minimum severity to sync issues, can be set to "critical", "high", "medium", "low"
+    min_severity: "high"
+    # This will limit the number of issues that will be open for this type in GitHub
+    max_open_issues: 3 # Set to a number to limit open issues, null for no limit
+
+  coverage:
+    num_files: 5 # Number of files to sync for coverage (default: 5)
+    min_coverage: 75 # Minimum coverage percentage to reach, issues are created for files below this threshold (default: 70.0)
+    # This will limit the number of issues that will be open for this type in GitHub
+    max_open_issues: 3 # Set to a number to limit open issues, null for no limit
+
+  observe:
+    num_batches: 3 # Number of batches to sync for Observe issues (default: 5)
+    # This will limit the number of issues that will be open for this type in GitHub
+    max_open_issues: 3 # Set to a number to limit open issues, null for no limit
+
+log_level: "DEBUG" # Can be set via PATCHWERK_LOG_LEVEL env var (DEBUG, INFO, WARNING, ERROR, CRITICAL)

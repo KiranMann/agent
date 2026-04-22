@@ -1,0 +1,219 @@
+site_name: Financial Companion Agent
+theme:
+  name: material
+  features:
+    # Allows copying code blocks
+    - content.code.copy
+    # Allows selecting code blocks
+    - content.code.select
+    # Shows the current path in the sidebar
+    - navigation.path
+    # Shows sections in the sidebar
+    - navigation.sections
+    # Enables annotations in code blocks
+    - content.code.annotate
+  palette:
+    # Palette toggle for automatic mode
+    - media: "(prefers-color-scheme)"
+      primary: black
+      toggle:
+        icon: material/brightness-auto
+        name: Switch to system preference
+
+    # Palette toggle for light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: black
+      toggle:
+        icon: material/brightness-7
+        name: Switch to light mode
+
+    # Palette toggle for dark mode
+    - media: "(prefers-color-scheme: dark)"
+      primary: black
+      scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Switch to dark mode
+
+  logo: assets/images/logo.png
+  # favicon: images/favicon.svg
+
+repo_url: https://github.com/CBA-General/FinancialCompanion # TODO: update this to your repo
+repo_name: Financial Companion
+
+nav:
+  - Overview:
+      - Deployment Guide: overview/deployment-guide.md
+      - Database Guide: overview/database-guide.md
+      - Contribution Guide: overview/contribution-guide.md
+      - Versioning and Tagging Guide: overview/versioning-and-tagging-guide.md
+  - Monorepo:
+      - Versioning Model: monorepo/monorepo-versioning.md
+      - Build Workflows: monorepo/build-workflows.md
+      - Environment State Tracking: monorepo/environment-state-tracking.md
+      - Release Train Promotion Guide: monorepo/release-train-promotion-guide.md
+  - Setup & Configuration:
+      - Agent Setup Guide: setup-configuration/setup-docs.md
+      - Logging Configuration: setup-configuration/logging-configuration-guide.md
+      - Docker Compose Guide: setup-configuration/docker-compose-guide.md
+  - Orchestration:
+      - System Architecture: orchestration/orchestrator.md
+      - Layer 1 - Intent Routing: orchestration/layer1-routing.md
+      - Layer 2 - Agent Execution: orchestration/layer2-execution.md
+      - Layer 3 - Response Synthesis: orchestration/layer3-synthesis.md
+  - Sub-Agents:
+      - General Queries Agent:
+          - General Queries Agent Overview: sub-agents/general-queries-agent/general_queries_agent_system_overview.md
+          - Evaluation & Performance: sub-agents/general-queries-agent/evaluation_and_performance.md
+      - Products Agent:
+          - Products Agent Overview: sub-agents/products-agent/products_agent_system_overview.md
+          - Evaluation & Performance: sub-agents/products-agent/evaluation_and_performance.md
+      - Savings Agent:
+          - System Overview & Agent Design: sub-agents/savings-agent/system-overview.md
+          - Technical Design & Implementation: sub-agents/savings-agent/technical-overview.md
+          - Tools Overview: sub-agents/savings-agent/tooling-overview.md
+          - Evaluation: sub-agents/savings-agent/evaluation.md
+          - Query Transactions Tool + Eval: sub-agents/savings-agent/sql-query-tool.md
+      - Homebuying Agent:
+          - System Overview & Agent Design: sub-agents/homebuying-agent/homebuying_agent_system_overview.md
+          - Technical Design & Implementation: sub-agents/homebuying-agent/homebuying_agent_technical_overview.md
+          - Tools:
+              - Borrowing Power Calculator: sub-agents/homebuying-agent/tools/borrowing-power-calculator.md
+              - Upfront Costs & LVR Calculator: sub-agents/homebuying-agent/tools/upfront-costs-and-lvr-calculator.md
+              - Loan Repayment Calculator: sub-agents/homebuying-agent/tools/loan-repayment-calculator.md
+              - Government Grants & Schemes: sub-agents/homebuying-agent/tools/gov-grants-schemes.md
+              - Product Selection: sub-agents/homebuying-agent/tools/product-selection.md
+  - Operations:
+      - On-call: operations/on-call.md
+      - Incident Management: operations/incident-management.md
+      - Observability: operations/observability.md
+  - Tooling Components:
+      - Overview: tooling-components/index.md
+      - Historical Search Tools: tooling-components/historical_search_tools.md
+      - SSO Deeplink Tools: tooling-components/sso-deeplink-tools.md
+      - Message Feedback Handling: tooling-components/message-feedback-handling.md
+      - Personalisation Agent: tooling-components/personalisation-agent.md
+      - RAG Tools: tooling-components/rag-tools.md
+      - LaunchDarkly Integration: launchdarkly-integration.md
+      - LaunchDarkly Troubleshooting: launchdarkly-troubleshooting.md
+      - Gen UI Schema Tool: tooling-components/gen-ui-schema-tool.md
+  - Guardrails:
+      - Guardrails Overview: guardrails/guardrails-overview.md
+      - Financial Advice Guardrail Flow: guardrails/financial-advice-guardrail-flow.md
+      - Factual Information Policy: guardrails/factual-information-policy.md
+  - Development & Testing:
+      - Product Testing Strategy: development-testing/product-testing-strategy.md
+      - Evaluation Framework: development-testing/evaluation-framework.md
+      - Judge Calibration: development-testing/judge-calibration.md
+      - Mock APIs: development-testing/mock-apis.md
+      - Performance Analyzer: development-testing/performance_analyzer.md
+      - Performance Testing: development-testing/performance-testing.md
+      - Developer Troubleshooting: development-testing/developer-troubleshooting.md
+      - Bootstrapped Judge Eval: development-testing/bootstrap-judge-evals.md
+      - Managing Dependencies: development-testing/managing-dependencies.md
+  - Project Management:
+      - Daily Standup Logs: project-management/standup-logs.md
+      - Agent Progress Updates: project-management/agent-interim-progress-updates.md
+      - Daily Eval Results: project-management/eval-results.md
+  - Component Evaluation:
+      - Evaluation Coverage & Maturity: component-eval/evaluation-coverage-and-maturity.md
+      - Completeness Evaluation Guide: component-eval/completeness-evaluation-guide.md
+      - Persona Generation:
+          - Development Docs: component-eval/persona-generation/dev-docs.md
+          - Data Docs: component-eval/persona-generation/data-generation.md
+          - Technical Overview: component-eval/persona-generation/personalisation-eval-technical.md
+      - RAG Evaluation:
+          - Component Design: component-eval/rag-eval/rag-problem-statement.md
+          - Evaluation Design: component-eval/rag-eval/rag-eval-design.md
+          - Ingestion Evaluation:
+              - Development Docs: component-eval/rag-eval/ingestion-eval/dev-doc-rag-ingestion.md
+              - Data Construction: component-eval/rag-eval/ingestion-eval/data-doc-rag-ingestion.md
+              - Constants Reference: component-eval/rag-eval/ingestion-eval/rag-ingestion-constants.md
+          - Search Evaluation:
+              - Development Docs: component-eval/rag-eval/search-eval/dev-docs.md
+              - Data Docs: component-eval/rag-eval/search-eval/data-generation.md
+              - Search Completeness Evaluation: component-eval/rag-eval/search-eval/search-completeness-evaluation.md
+              - Contradiction and Redundancy Evaluation: component-eval/rag-eval/search-eval/contradiction-redundancy-evaluation.md
+              - Tool Description Analysis: component-eval/rag-eval/search-eval/tool-description-analysis.md
+      - Judge Evaluation:
+          - Overview: component-eval/judge-eval/judge-eval-00-overview.md
+          - Relevancy: component-eval/judge-eval/judge-eval-01-relevancy.md
+          - Tool Input Correctness: component-eval/judge-eval/judge-eval-02-tool-input-correctness.md
+          - Tool Faithfulness Judge: component-eval/judge-eval/judge-eval-03-tool-faithfulness.md
+          - Tool Selection Judge: component-eval/judge-eval/judge-eval-05-tool-selection.md
+          - Expected Outcomes Judge: component-eval/judge-eval/judge-eval-06-expected-outcomes.md
+      - Guardrail Evaluation:
+          - Overview and Dashboard: component-eval/guardrails-eval/guardrails-eval-00-overview.md
+      - Orchestrator Evaluation:
+          - Layer 1 - Intent Classification: component-eval/layer1-intent-classification/layer1-eval.md
+          - Layer 3 - Synthesis: component-eval/layer3-synthesis/layer3-eval.md
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          # To expand to all
+          paths: ["src"]
+          options:
+            docstring_style: google
+            # Shows links to other members in signatures
+            signature_crossrefs: true
+            # Orders members by source order, rather than alphabetical
+            members_order: source
+            # Puts the signature on a separate line from the member name
+            separate_signature: true
+            # Shows type annotations in signatures
+            show_signature_annotations: true
+            # Makes the font sizes nicer
+            heading_level: 3
+            # Show inherited members
+            inherited_members: true
+
+extra:
+  generator: false
+  consent:
+    title: Cookie consent
+    description: >-
+      We use cookies to recognize your repeated visits and preferences, as well
+      as to measure the effectiveness of our documentation and whether users
+      find what they're searching for. With your consent, you're helping us to
+      make our documentation better.
+
+copyright: "Created and maintained by humans and generative AI 🤖"
+
+markdown_extensions:
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - admonition
+  - toc:
+      toc_depth: '1-3' # Hide levels 5 and 6 headings from table of contents
+  - pymdownx.details
+  - attr_list
+  - md_in_html
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - pymdownx.arithmatex:
+      generic: true
+
+validation:
+  omitted_files: warn
+  absolute_links: warn
+  unrecognized_links: warn
+  anchors: warn
+
+extra_css:
+  - stylesheets/diagram-theme.css
+  - stylesheets/navigation-spacing.css
+
+extra_javascript:
+  - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js

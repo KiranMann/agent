@@ -1,0 +1,46 @@
+# Financial Companion CODEOWNERS
+# Each team is responsible for their respective codebase areas
+# Teams should be created in GitHub as @organization/team-name format
+# Individual users are used as fallback until teams are created
+
+# Global fallback - requires at least one review from senior team members
+* @CBA-General/financial-companion-leads @Aurelien-Gaudin_cba @Ritchie-Ng_cba @Gaurav-Verma_cba @Vijay-Patil_cba @Boris-Kogan1_cba @Mitchell-OngThomson_cba
+
+# Core Agent Team - Main orchestrator and core functionality
+/all_agents/ @CBA-General/financial-companion-core
+
+# Eval Tech Stream
+/evals/ @CBA-General/financial-companion-evals
+/evals-aer/ @CBA-General/financial-companion-evals
+/tests/evals/ @CBA-General/financial-companion-evals
+/docs/development-testing/ @CBA-General/financial-companion-evals
+/.github/workflows/run-evals.yaml @CBA-General/financial-companion-evals
+
+# Savings Agent Team
+/all_agents/task_agents/savings_agent/ @CBA-General/financial-companion-savings-agent
+
+# Products Agent Team
+/all_agents/task_agents/products_agent/ @CBA-General/financial-companion-products-agent
+
+# Home Loans Agent Team
+/all_agents/task_agents/homeloans_agent/ @CBA-General/financial-companion-homebuying-agent
+
+# InvestingHub Agent Team
+/all_agents/task_agents/investinghub_agent/ @CBA-General/financial-companion-investinghub-agent
+
+# Disputes Agent Team
+/all_agents/disputes_agent/ @CBA-General/arcane-engineers @CBA-General/arcane-data-scientists
+
+# Infrastructure & DevOps
+/docker-compose*.yaml @CBA-General/financial-companion-devops
+/Dockerfile* @CBA-General/financial-companion-devops
+/requirements*.txt @CBA-General/financial-companion-devops
+/init.sql @CBA-General/financial-companion-devops
+/.env* @CBA-General/financial-companion-devops
+
+# Security sensitive files
+/private*.key @CBA-General/financial-companion-security
+/*.pem @CBA-General/financial-companion-security
+
+# Allow anyone to merge daily eval results
+/docs/project-management/eval-results.md @CBA-General/rbs-financial-companion-engineer

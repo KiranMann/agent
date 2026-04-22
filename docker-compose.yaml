@@ -1,0 +1,17 @@
+include:
+    - path: docker/common/networks.yaml
+      project_directory: .
+    - path: docker/infrastructure/postgres.yaml
+      project_directory: .
+    - path: docker/infrastructure/redis.yaml
+      project_directory: .
+    - path: docker/infrastructure/liquibase.yaml
+      project_directory: .
+    - path: docker/infrastructure/pgadmin.yaml
+      project_directory: .
+    - path: docker/services/agent.local.yaml
+      project_directory: .
+    - path: docker/services/gradio.yaml
+      project_directory: .
+    - path: apps/persona/cron.yaml
+      project_directory: .

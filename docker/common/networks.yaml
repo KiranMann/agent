@@ -1,0 +1,4 @@
+networks:
+    agentic_network:
+        driver: bridge
+        name: agentic_network

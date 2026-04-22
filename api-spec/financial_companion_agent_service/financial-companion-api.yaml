@@ -1,0 +1,744 @@
+openapi: 3.0.1
+info:
+  title: Financial Companion Agent
+  description: |
+    The Financial Companion Agent Service API provides a comprehensive platform for intelligent financial guidance and customer interactions within the Commonwealth Bank ecosystem. This service orchestrates a sophisticated multi-agent system designed to deliver personalized financial advice through various interaction modalities.
+
+    ## Core Capabilities
+
+    **Multi-Modal Interactions**: Support for both text-based messaging and voice interactions, including complete voice-to-text-to-voice pipeline processing for seamless conversational experiences.
+
+    **Specialized Financial Intelligence**: Leverages domain-specific sub-agents for different financial areas including home loans, savings products, payments, and general banking products, each optimized for their respective expertise areas.
+
+    **Rich User Experience**: Generates structured responses with interactive UI components including cashflow summaries, HTML widgets, plain text displays, and image content to provide engaging and informative user experiences.
+
+    **Enterprise-Grade Architecture**: Built for multi-tenant environments with project-specific routing, comprehensive session management, and OAuth2 JWT-based security for secure enterprise integrations.
+
+    ## Key Features
+
+    - **Conversational AI**: Natural language processing for financial queries with context-aware responses
+    - **Voice Processing**: End-to-end voice interaction capabilities with speech recognition and synthesis
+    - **Dynamic UI Components**: Real-time generation of interactive widgets and visual components
+    - **Session Management**: Persistent conversation state and context management across interactions
+    - **Sub-Agent Routing**: Intelligent routing to specialized agents based on query context or explicit shortcuts
+
+  contact:
+    name: Financial Companion Agent Team
+    url: https://github.com/CBA-General/FinancialCompanion
+    email: financial-companion-team@cba.com.au
+  version: v1.0.0
+  license:
+    name: Commonwealth Bank of Australia Proprietry Internal
+  x-audience: company-internal
+  x-cba-api-platform-domain: Financial Services - AI Agent
+
+tags:
+  - name: Messaging
+    description: API endpoints for text-based messaging with the financial companion agent
+  - name: Voice
+    description: API endpoints for voice interactions with the financial companion agent
+  - name: Conversations
+    description: API endpoints for structured conversation management
+  - name: Agent Management
+    description: API endpoints for agent handling and conversation management
+
+servers:
+  - url: https://d-s-agenticai-app-alb.dotdtdp03dev01.aws.test.au.internal.cba
+    description: Production server landscape gateway endpoint
+
+components:
+  securitySchemes:
+    Jwt:
+      description: JWT authentication using OAuth2
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: /as/token.oauth2
+          scopes:
+            financial-companion.message.write: Scope for sending messages to the agent
+            financial-companion.voice.write: Scope for voice interactions
+            financial-companion.conversations.write: Scope for conversation management
+            financial-companion.conversation.write: Scope for conversation manager integration and agent handling operations
+            financial-companion.agent.write: Scope for agent handling operations
+
+  schemas:
+    successResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        data:
+          type: object
+          description: Response data, varies by endpoint
+        message:
+          type: string
+          description: Optional success message
+
+    errorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: string
+          description: Error type
+        message:
+          type: string
+          description: Error message
+
+    simpleInputPayload:
+      type: object
+      description: Simple input payload for basic messaging
+      properties:
+        sessionId:
+          type: string
+          description: Unique session identifier
+        userQuery:
+          type: string
+          description: User's query or message
+        userContext:
+          type: string
+          description: Optional user context information
+        uid:
+          type: string
+          description: User identifier
+      required:
+        - sessionId
+        - userQuery
+
+    cmInputPayload:
+      type: object
+      description: Conversation Manager input payload for advanced conversation handling
+      properties:
+        conversation_id:
+          type: string
+          description: Unique conversation identifier from Conversation Manager
+        message_id:
+          type: string
+          description: Unique message identifier from Conversation Manager
+      required:
+        - conversation_id
+        - message_id
+
+    voiceInputPayload:
+      type: object
+      description: Voice input payload for voice interactions
+      properties:
+        sessionId:
+          type: string
+          description: Unique session identifier
+        audioData:
+          type: string
+          format: byte
+          description: Base64 encoded audio data
+        audioFormat:
+          type: string
+          description: Audio format (e.g., wav, mp3)
+          default: wav
+        language:
+          type: string
+          description: Language code for speech recognition
+          default: en-US
+      required:
+        - sessionId
+        - audioData
+
+    financialCompanionRequest:
+      type: object
+      description: Request model for financial companion endpoint
+      properties:
+        userContext:
+          type: string
+          description: Optional user context information
+        sessionId:
+          type: string
+          description: Unique session identifier
+        userQuery:
+          type: string
+          description: User's financial query
+        subAgentShortcut:
+          type: string
+          description: Optional shortcut to specific sub-agent (e.g., homeloans, savings, payments, products)
+      required:
+        - sessionId
+        - userQuery
+
+    widgetType:
+      type: string
+      enum:
+        - plainText
+        - html
+        - cashflowSummary
+        - image
+      description: Type of UI widget component
+
+    uiComponent:
+      type: object
+      description: UI component for rich response rendering
+      properties:
+        widgetType:
+          $ref: '#/components/schemas/widgetType'
+        fallbackContent:
+          type: string
+          description: Fallback text content
+        rawContent:
+          type: object
+          description: Raw content data for the widget
+        uiFlags:
+          type: array
+          items:
+            type: string
+          description: UI flags for component behavior
+        type:
+          type: string
+          description: Component type
+        title:
+          type: string
+          description: Component title
+        status:
+          type: string
+          description: Component status
+        message:
+          type: string
+          description: Component message
+        details:
+          type: object
+          description: Additional component details
+        actions:
+          type: array
+          items:
+            type: object
+          description: Available actions for the component
+        timeline:
+          type: array
+          items:
+            type: object
+          description: Timeline data for the component
+        fields:
+          type: array
+          items:
+            type: object
+          description: Form fields for the component
+      required:
+        - widgetType
+        - fallbackContent
+
+    financialQueryResponse:
+      type: object
+      description: Response model for financial queries
+      properties:
+        sessionId:
+          type: string
+          description: Session identifier
+        message:
+          type: string
+          description: Response message text
+        responseMessage:
+          type: array
+          items:
+            type: object
+          description: Structured response messages
+        action:
+          type: string
+          description: Optional action to be taken
+        uiComponents:
+          type: array
+          items:
+            $ref: '#/components/schemas/uiComponent'
+          description: UI components for rich response rendering
+      required:
+        - sessionId
+        - message
+        - responseMessage
+        - uiComponents
+
+paths:
+  /message:
+    post:
+      tags:
+        - Messaging
+      summary: Send message to financial companion agent
+      description: Send a text message to the financial companion agent for processing
+      security:
+        - Jwt:
+          - financial-companion.message.write
+      x-idp-scope: "financial-companion.message.write"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/simpleInputPayload'
+      responses:
+        '200':
+          description: Message processed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+
+  /{project}/message:
+    post:
+      tags:
+        - Messaging
+      summary: Send message to financial companion agent (project-specific)
+      description: Send a text message to the financial companion agent for a specific project
+      security:
+        - Jwt:
+          - financial-companion.message.write
+      x-idp-scope: "financial-companion.message.write"
+      parameters:
+        - name: project
+          in: path
+          required: true
+          description: Project identifier
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/simpleInputPayload'
+      responses:
+        '200':
+          description: Message processed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+
+  /voice:
+    post:
+      tags:
+        - Voice
+      summary: Process voice input
+      description: Process voice input for the financial companion agent
+      security:
+        - Jwt:
+          - financial-companion.voice.write
+      x-idp-scope: "financial-companion.voice.write"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/voiceInputPayload'
+      responses:
+        '200':
+          description: Voice input processed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+
+  /{project}/voice:
+    post:
+      tags:
+        - Voice
+      summary: Process voice input (project-specific)
+      description: Process voice input for the financial companion agent for a specific project
+      security:
+        - Jwt:
+          - financial-companion.voice.write
+      x-idp-scope: "financial-companion.voice.write"
+      parameters:
+        - name: project
+          in: path
+          required: true
+          description: Project identifier
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/voiceInputPayload'
+      responses:
+        '200':
+          description: Voice input processed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+
+  /voice-complete:
+    post:
+      tags:
+        - Voice
+      summary: Complete voice pipeline processing
+      description: Handle complete voice pipeline - voice to text to agent to text to voice
+      security:
+        - Jwt:
+          - financial-companion.voice.write
+      x-idp-scope: "financial-companion.voice.write"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/voiceInputPayload'
+      responses:
+        '200':
+          description: Voice pipeline completed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+
+  /{project}/voice-complete:
+    post:
+      tags:
+        - Voice
+      summary: Complete voice pipeline processing (project-specific)
+      description: Handle complete voice pipeline for a specific project
+      security:
+        - Jwt:
+          - financial-companion.voice.write
+      x-idp-scope: "financial-companion.voice.write"
+      parameters:
+        - name: project
+          in: path
+          required: true
+          description: Project identifier
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/voiceInputPayload'
+      responses:
+        '200':
+          description: Voice pipeline completed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+
+  /handle:
+    post:
+      tags:
+        - Agent Management
+      summary: Handle agent requests
+      description: Handle incoming requests for the financial companion agent with conversation management. Processes requests asynchronously and returns immediate acceptance.
+      security:
+        - Jwt:
+          - financial-companion.conversation.write
+      x-idp-scope: "financial-companion.conversation.write"
+      parameters:
+        - name: correlation_id
+          in: header
+          required: true
+          description: Correlation ID for request tracking
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/cmInputPayload'
+      responses:
+        '202':
+          description: Request accepted for asynchronous processing
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "accepted"
+                  message:
+                    type: string
+                    example: "Conversation is being processed asynchronously."
+                  correlation_id:
+                    type: string
+                    description: Echo of the correlation ID from the request
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+
+  /{project}/handle:
+    post:
+      tags:
+        - Agent Management
+      summary: Handle agent requests (project-specific)
+      description: Handle incoming requests for the financial companion agent for a specific project. Processes requests asynchronously and returns immediate acceptance.
+      security:
+        - Jwt:
+          - financial-companion.conversation.write
+      x-idp-scope: "financial-companion.conversation.write"
+      parameters:
+        - name: project
+          in: path
+          required: true
+          description: Project identifier
+          schema:
+            type: string
+        - name: correlation_id
+          in: header
+          required: true
+          description: Correlation ID for request tracking
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/cmInputPayload'
+      responses:
+        '202':
+          description: Request accepted for asynchronous processing
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "accepted"
+                  message:
+                    type: string
+                    example: "Conversation is being processed asynchronously."
+                  correlation_id:
+                    type: string
+                    description: Echo of the correlation ID from the request
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+
+  /conversations:
+    post:
+      tags:
+        - Conversations
+      summary: Handle financial companion conversations
+      description: Handle financial companion requests with structured response format including UI components
+      security:
+        - Jwt:
+          - financial-companion.conversations.write
+      x-idp-scope: "financial-companion.conversations.write"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/financialCompanionRequest'
+      responses:
+        '200':
+          description: Conversation processed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/financialQueryResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+
+  /{project}/conversations:
+    post:
+      tags:
+        - Conversations
+      summary: Handle financial companion conversations (project-specific)
+      description: Handle financial companion requests for a specific project with structured response format
+      security:
+        - Jwt:
+          - financial-companion.conversations.write
+      x-idp-scope: "financial-companion.conversations.write"
+      parameters:
+        - name: project
+          in: path
+          required: true
+          description: Project identifier
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/financialCompanionRequest'
+      responses:
+        '200':
+          description: Conversation processed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/financialQueryResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorResponse'

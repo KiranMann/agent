@@ -1,0 +1,9 @@
+include:
+    - path: docker/common/networks.yaml
+      project_directory: .
+    - path: docker/common/volumes.yaml
+      project_directory: .
+    - path: docker/services/langfuse/db.yaml
+      project_directory: .
+    - path: docker/services/langfuse/server.yaml
+      project_directory: .

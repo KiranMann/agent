@@ -1,0 +1,215 @@
+# vim: set filetype=sh :
+
+# Database Configuration
+export DB_HOST=0.0.0.0
+export DB_PORT="5433"
+export DB_NAME="agenticai_agent_db"
+export DB_USER="postgres"
+export DB_PASSWORD="password"
+
+# OpenAI/Gen.AI Configuration
+export OPENAI_BASE_URL=https://api.studio.genai.cba
+export OPENAI_API_KEY=<your-api-key> # Get from GenAI studio and refresh every 7 days.
+export OPENAI_VOICE_KEY="" # Not required if not using voice communication
+
+# Agent Configuration
+export AGENT=FinancialCompanionAgent
+export AGENT_LLM=bedrock-claude-4-5-sonnet
+export AGENT_LLM_PROVIDER=openai
+export FINANCIAL_COMPANION_AGENT_LLM=bedrock-claude-4-5-haiku
+export SAVINGS_AGENT_LLM=gpt-4.1_v2025-04-14_GLOBAL
+export PRODUCTS_AGENT_LLM=gpt-4.1_v2025-04-14_GLOBAL
+export HOMEBUYING_AGENT_LLM=gpt-4.1_v2025-04-14_GLOBAL
+export PAYMENT_AGENT_LLM=gpt-4.1_v2025-04-14_GLOBAL
+export GUARDRAILS_RESPONSE_LLM=gpt-4.1_v2025-04-14_GLOBAL
+export TOOL_FAITHFULNESS_CLAIMS_EVALUATION_LLM=bedrock-claude-4-5-haiku
+export TOOL_FAITHFULNESS_CLAIMS_EXTRACTION_LLM=bedrock-claude-4-5-haiku
+
+# Development Settings
+export IN_DEV=True
+export DHP_NON_PROD=True
+export SET_DHP_PROXY=False
+export OTEL_LOG_LEVEL=debug
+export LITELLM_LOG=WARNING
+export SKIP_IDP_AUTH_CHECK=True
+
+# A2A Protocol Configuration (Agent-to-Agent communication)
+# Enable A2A protocol for inter-agent communication via JSON-RPC HTTP.
+# When disabled (default), agents run in-process via direct Python calls.
+# When enabled, agents communicate via HTTP JSON-RPC with automatic fallback.
+# export A2A_ENABLED=True
+
+# Enable A2A routing with in-process fallback for eligible agents.
+# Requires A2A_ENABLED=True to have any effect.
+# When True: Routes eligible agents via A2A, falls back to in-process on failure.
+# When False: Uses in-process execution directly (even if A2A_ENABLED=True).
+# export A2A_ROUTING_ENABLED=True
+
+# Path to agent cards directory (default: common/a2a/agent_cards)
+# Agent cards define agent metadata, capabilities, and routing rules.
+# export A2A_CARDS_DIR=common/a2a/agent_cards
+
+# Path to agents configuration file (default: common/a2a/config/a2a_agents.yaml)
+# This YAML file lists all enabled internal and external agents.
+# export A2A_AGENTS_CONFIG=common/a2a/config/a2a_agents.yaml
+
+# HTTP timeout for A2A client requests in seconds (default: 30)
+# export A2A_CLIENT_TIMEOUT_SECONDS=30
+
+# Note: Agent server ports are configured in agent card files (common/a2a/agent_cards/*.json),
+#       not via environment variables. Defaults: Products=8001, Savings=8002, Homeloans=8003.
+#       See docs/a2a/a2a-implementation.md for details.
+
+# Optional, but highly recommended: Langfuse Integration (See docs for detailed setup)
+export LANGFUSE_FLAG=False
+export LANGFUSE_SECRET_KEY=""
+export LANGFUSE_PUBLIC_KEY=""
+export LANGFUSE_HOST=http://localhost:3000
+export USE_LANGFUSE_PROMPT=False
+
+# Optional: Prompt Caching for Claude-supported orchestration calls
+export ENABLE_INTENT_CLASSIFIER_PROMPT_CACHING=True
+export ENABLE_SYNTHESIS_PROMPT_CACHING=True
+
+# Optional: LaunchDarkly (See docs for setup)
+export LAUNCHDARKLY_SDK_KEY="" # Ask an engineer/DS for this
+export LAUNCHDARKLY_OFFLINE=True # Set to True for local development without connecting to LaunchDarkly
+export LAUNCHDARKLY_DISABLE_SSL_VERIFICATION=True
+
+# Guardrails Service & Configuration
+## Uncomment out the below if wanting to test guardrails locally
+## Note: The below guardrails are implemented using Guardrails as a Service (GAAS), the endpoints for which can be unstable in lower environments
+export GUARDRAILS_SERVICE_BASE_URL="https://guardrail.dp3.dev.ai.dhp.cba"
+export ENABLE_V3_GUARDRAILS=True
+# export ENABLE_PROFANITY_OUTPUT_CHECK=True
+# export ENABLE_PROFANITY_INPUT_CHECK=True
+# export ENABLE_COMPETITOR_OUTPUT_CHECK=True
+# export ENABLE_COMPETITOR_INPUT_CHECK=True
+# export ENABLE_LANGUAGE_CHECK=True
+# export ENABLE_COMPLAINT_CHECK=True
+# export ENABLE_HARMFUL_CONTENT_CHECK=True
+# export ENABLE_JAILBREAK_CHECK=True
+# export ENABLE_OFFTOPIC_CHECK=True
+# export ENABLE_VULNERABILITY_CHECK=True
+# export ENABLE_MEMORY_PII_GUARDRAIL=True
+## Financial Advice Guardrail - internally owned
+# QUALITY_GUARDRAIL="AutomatedReasoning"
+# ENABLE_QUALITY_CHECK=True
+# ENABLE_FINANCIAL_ADVICE_OUTPUT_CHECK=True
+# ENABLE_FINANCIAL_ADVICE_INPUT_CHECK=True
+
+# RAG Configuration
+export RAG_KNOWLEDGE_BASE_FLAG=True
+export RAG_KNOWLEDGE_BASE_ID="" # Ask an engineer/DS for this
+export RAG_KNOWLEDGE_BASE_MODEL="" # Ask an engineer/DS for this
+# The below keys need to be refreshed every 12 hours
+export AWS_ACCESS_KEY_ID="" # You require a role for this - AR - AWS - cba-a-np-1021942 - DHP Engineer Role for DHP Digital Banking Platform 3 Dev Environment
+export AWS_SECRET_ACCESS_KEY="" # You require a role for this - AR - AWS - cba-a-np-1021942 - DHP Engineer Role for DHP Digital Banking Platform 3 Dev Environment
+export AWS_SESSION_TOKEN="" # You require a role for this - AR - AWS - cba-a-np-1021942 - DHP Engineer Role for DHP Digital Banking Platform 3 Dev Environment
+
+# API IDP Client
+export GROUP_IDP_CLIENT_ID="session-dialogue-money-management.int.npd.financialcompanion"
+
+# Feature Flag for Clients API (Will toggle between using the below accounts service and client service)
+export ENABLE_CLIENTS_API=False
+
+# Payments API service
+export PAYMENTS_SERVICE_BASE_URL="https://internalapi.test.dp-retail.azure.test.au.internal.cba/api.payments.v1"
+export PAYMENTS_SERVICE_USERNAME="" # Ask an engineer/DS for this
+export PAYMENTS_SERVICE_PASSWORD="" # Ask an engineer/DS for this
+
+# CommBank Client service
+export COMMBANK_CLIENT_SERVICE_USERNAME="" # Ask an engineer/DS for this
+export COMMBANK_CLIENT_SERVICE_PASSWORD="" # Ask an engineer/DS for this
+
+# Accounts API service
+export ACCOUNT_SERVICES_BASE_URL="https://internalapi.test.dp-retail.azure.test.au.internal.cba/api.accounts.v1"
+export ACCOUNTS_SERVICE_USERNAME="" # Ask an engineer/DS for this
+export ACCOUNTS_SERVICE_PASSWORD="" # Ask an engineer/DS for this
+
+# Spend and save API services
+export BILLHUB_SERVICE_USERNAME="" # Ask an engineer/DS for this
+export BILLHUB_SERVICE_PASSWORD="" # Ask an engineer/DS for this
+export CASHFLOW_SERVICE_BASE_URL="https://internalapi-mel-innovate.test.dp-retail.azure.test.au.internal.cba/api.cashflow"
+export CASHFLOW_SERVICE_USERNAME="" # Ask an engineer/DS for this
+export CASHFLOW_SERVICE_PASSWORD="" # Ask an engineer/DS for this
+export SAVINGSGOALS_SERVICE_USERNAME="" # Ask an engineer/DS for this
+export SAVINGSGOALS_SERVICE_PASSWORD="" # Ask an engineer/DS for this
+export SPENDLIMITS_SERVICE_USERNAME="" # Ask an engineer/DS for this
+export SPENDLIMITS_SERVICE_PASSWORD="" # Ask an engineer/DS for this
+
+# Homebuying API services
+export HOME_BUYING_SERVICE_USERNAME="" # Ask an engineer/HB Agent team member (Lee/Luke) for this
+export HOME_BUYING_SERVICE_PASSWORD="" # Ask an engineer/HB Agent team member (Lee/Luke) for this
+
+export HOMELOAN_SERVICE_BASE_URL="https://commbank-api-homeloans.app-syd.test.dp-retail.azure.test.au.internal.cba"
+export CONSUMER_LOANS_SERVICE_BASE_URL="https://test01.consumer-finance.test.aws.groupapi.cba/consumer-loan/enquiry/v1/"
+export MORTGAGE_LOAN_SERVICE_BASE_URL="https://test01.home-buying.test.aws.groupapi.cba/loans-and-deposits/mortgage-loans/v1/"
+export INSIGHT_LOCATION_DATA_SERVICE_BASE_URL="https://test01.partydataservices.test.aws.groupapi.cba"
+export PROPERTY_DATA_SERVICE_BASE_URL="https://test01.home-buying.test.aws.groupapi.cba"
+export PROPERTY_VALUATION_SERVICE_BASE_URL="https://test01.home-buying.test.aws.groupapi.cba"
+export LOCATION_DATA_SERVICE_DEPARTMENT_CODE="hb-sessiondialoguemoneymgt"
+
+export GROUP_IDP_PRIVATE_KEY="" # Ask an engineer/HB Agent team member (Lee/Luke) for this
+export GROUP_HYBRID_IDP_URL="https://idp-int.dadbgroupidptes01.aws.test.au.internal.cba"
+export GROUP_HYBRID_IDP_CERT="" # Ask an engineer/HB Agent team member (Lee/Luke) for this
+export GROUP_HYBRID_IDP_PRIVATE_KEY="" # Ask an engineer/HB Agent team member (Lee/Luke) for this
+export GROUP_HYBRID_IDP_CERT_PASSWORD="" # Ask an engineer/HB Agent team member (Lee/Luke) for this
+
+# Investment hub parameters
+# Optional as this is currently not integrated with the FC agent
+export JWKS_URL="https://test01.idp.test.aws.groupapi.cba/tls/pf/JWKS"
+export GROUP_IDP_URL="https://test01.idp.test.aws.groupapi.cba"
+export JWKS_CACHE_TTL_SECONDS=120
+export GROUP_IDP_PRIVATE_KEY="paste private key here"
+
+export INVESTING_HUB_SECURITIES_API_URL=https://test02.advice-insurance.test.aws.groupapi.cba/investing-companion/v1/db-adapter
+export INVESTING_HUB_SECURITIES_API_SCOPE="investing-companion-read"
+export INVESTING_HUB_FEATURE_FLAG_PHASE_2=True
+export INVESTING_HUB_FEATURE_FLAG_ALL_TOOLS=True
+
+# Payment agent parameters
+export PAYMENT_AGENT_FEATURE_FLAG=True
+
+# OTLP Metrics Observability Configuration
+# Enable OTLP metrics export via CBA observability library
+export OTLP_METRICS_ENABLED=False # Set to True to enable OTLP metrics export
+export OTLP_METRICS_ENDPOINT="http://dev.roti.cba:4318/ced/v1/metrics"
+export OTLP_METRICS_AUTH_SCHEME="Bearer"
+export OTLP_METRICS_AUTH_TOKEN=""
+export OTLP_SERVICE_NAME="financial-companion"
+export OTLP_DEPLOYMENT_ENVIRONMENT="dev"
+export OTLP_CI_NUMBER="CI107355678"
+export OTLP_FEDERATED_OBSTACK_MODE=True
+export OTLP_BUSINESS_UNIT="Retail Technology"
+export OTLP_DOMAIN="Customer, Digital and AI"
+export OTLP_CREW="Digital"
+export OTLP_SQUAD="Financial Companion"
+
+# Local settings
+export SKIP_IDP_AUTH_CHECK=True
+
+##########################################
+# For evaluations - Uncomment if running locally
+##########################################
+
+# # Run tests requiring LLM calls or API access to the agent
+# export RUN_TESTS_REQUIRING_LLM=true
+# export RUN_TESTS_REQUIRING_API=true
+
+# export EVAL_SEED_DATE="2025-10-01" # Set the baseline date for evaluation data - update this if cached test data is from a different date
+# export ENABLE_MEMORY_PERSISTENCE=False
+# export MOCK_API_FLAG=True
+# export SAVINGS_AGENT_MOCK_READ_API_CACHE_PATH="evals/financial_companion_eval/test_data/read_cache/mock_service_read_cache_savings_agent"
+# export PRODUCTS_AGENT_MOCK_READ_API_CACHE_PATH="evals/financial_companion_eval/test_data/read_cache/mock_service_read_cache_products_agent"
+
+# # Update these to use different versions of the read cache for evaluation for your agent
+# export SAVINGS_CACHE_VERSIONS="{'savings': 'v1', 'home_buying': 'v1', 'products': 'v1'}"
+# export PRODUCTS_CACHE_VERSIONS="{'savings': 'v1', 'home_buying': 'v1', 'products': 'v1'}"
+# export HOME_BUYING_CACHE_VERSIONS="{'savings': 'v1', 'home_buying': 'v1', 'products': 'v1'}"
+
+# Digital Payment Limits API Configuration
+export DIGITAL_PAYMENT_LIMITS_SERVICE_BASE_URL="https://commbank-api-digitalpaymentlimits-v0.app-mel.test.dp-retail.azure.test.au.internal.cba"
+export DIGITAL_PAYMENT_LIMITS_SERVICE_USERNAME="Channel_DP_Paymentlimits_Test"
+export DIGITAL_PAYMENT_LIMITS_SERVICE_PASSWORD="DigitalPaymentLimitsTest"
+export DIGITAL_PAYMENT_LIMITS_SERVICE_API_KEY="5ea53c29-7623-cb4c-e053-071bf40aa300"

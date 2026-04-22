@@ -1,0 +1,17 @@
+services:
+    financial_companion_redis:
+        image: redis:8.6.1
+        ports:
+            - "6379:6379"
+        command: >
+            redis-server
+            --port 6379
+            --requirepass password
+            --appendonly yes
+        networks:
+            - agentic_network
+        healthcheck:
+            test: ["CMD", "redis-cli", "-p", "6379", "-a", "password", "ping"]
+            interval: 3s
+            retries: 10
+            timeout: 3s

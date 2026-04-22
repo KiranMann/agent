@@ -1,0 +1,19 @@
+services:
+    financial_companion_liquibase:
+        image: hub.docker.internal.cba/liquibase/liquibase:4.25-alpine
+        depends_on:
+            financial_companion_postgres:
+                condition: service_healthy
+        networks:
+            - agentic_network
+        working_dir: /liquibase/changelog
+        volumes:
+            - ./apps/db/financial_companion_agent_db/FinancialCompanion.Database:/liquibase/changelog:ro
+        command:
+            - --changelog-file=changelog.xml
+            - --url=jdbc:postgresql://financial_companion_postgres:5433/agenticai_agent_db
+            - --username=postgres
+            - --password=password
+            - --driver=org.postgresql.Driver
+            - update
+        restart: "no"
